@@ -1,0 +1,37 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.meilituibian.api.mapper.WxUserMapper">
+    <sql id="select_wx_user">
+        select user_id as userId,open_id as openId,nick_name as nickName,sex, country, city,province,head_url as headUrl,
+         remark, subscribe from Wx_User
+    </sql>
+
+    <select id="getWxUserById" parameterType="long" resultType="WxUser">
+        <include refid="select_wx_user"/>  where user_id=#{id}
+    </select>
+
+    <select id="getWxUserByOpenId" parameterType="String" resultType="WxUser">
+        <include refid="select_wx_user"/>  where open_id=#{openId}
+    </select>
+
+    <insert id="insertWxUser" keyColumn="user_id" useGeneratedKeys="true" parameterType="WxUser">
+        insert into wx_user(open_id,nick_name,sex,country,city,province,head_url,remark,subscribe,create_time)
+        values(#{openId}, #{nickName}, #{sex}, #{country}, #{city}, #{province}, #{head_url}, #{remark}, #{subscribe}, now())
+    </insert>
+
+    <update id="updateWxUser">
+        update wx_user
+        <set>
+            <if test="nickName != null">nick_name=#{nickName},</if>
+            <if test="sex != null">sex=#{sex},</if>
+            <if test="country != null">country=#{country},</if>
+            <if test="city != null">city=#{city},</if>
+            <if test="province != null">province=#{province},</if>
+            <if test="head_url != null">head_url=#{headUrl},</if>
+            <if test="remark != null">remark=#{remark},</if>
+        </set>
+        where open_id=#{openId}
+    </update>
+</mapper>

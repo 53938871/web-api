@@ -1,0 +1,37 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.meilituibian.api.mapper.OrderMapper">
+    <insert id="insertOrder" parameterType="Order" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+         insert into `Order`(open_id,project_id,project_name,user_name,phone,email,subscribe_date,leader,create_date)
+         values(#{openId}, #{projectId}, #{projectName}, #{userName}, #{phone}, #{email}, #{subscribeDate}, #{leader}, #{createDate})
+    </insert>
+
+    <select id="getOrdersByOpenId" parameterType="long" resultType="Order">
+        select open_id as openId,project_id as projectId,project_name as projectName,user_name as userName,phone,email,subscribeDate, leader,create_date as createDate
+        from `Order` where open_id=open_id and status != -1 order by subscribe_date desc
+    </select>
+
+    <select id="getOrderById" parameterType="long" resultType="Order">
+        select id, open_id as openId,project_id as projectId,project_name as projectName,user_name as userName,phone, create_date as createDate,subscribe_date as subscribeDate, leader
+        from `Order` where id = #{id}
+    </select>
+
+    <update id="updateOrder" parameterType="Order">
+       UPDATE `Order`
+        <set>
+        <if test="projectId != null">project_id=#{projectId},</if>
+        <if test="projectName != null">project_name=#{projectName},</if>
+        <if test="userName != null">user_name=#{userName},</if>
+        <if test="phone != null">phone=#{phone},</if>
+        <if test="email != null">email=#{email},</if>
+        <if test="address != null">address=#{address},</if>
+        <if test="postCode != null">post_code=#{postCode},</if>
+        <if test="updateDate != null">update_date=#{updateDate},</if>
+        <if test="subscribeDate != null">subscribe_date=#{subscribeDate},</if>
+        </set>
+        where open_id = #{openId}
+    </update>
+
+</mapper>

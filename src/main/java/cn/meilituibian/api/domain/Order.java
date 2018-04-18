@@ -1,0 +1,153 @@
+package cn.meilituibian.api.domain;
+
+import cn.meilituibian.api.common.OrderEnum;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.io.Serializable;
+import java.util.Date;
+
+public class Order implements Serializable {
+    private Long id;
+    private Long projectId;
+    private String openId;
+    private String userName;
+    private String projectName;
+    private String phone;
+    private String email;
+    @JsonIgnore
+    private String address;
+    @JsonIgnore
+    private String postCode;
+    @JsonIgnore
+    private int status; //-1:冻结,0:待处理,1:处理中，2:处理完成
+    private String orderStatus;
+
+    @JsonFormat(pattern="yyyy-MM-dd")
+    private Date createDate;
+
+    @JsonFormat(pattern="yyyy-MM-dd")
+    private Date updateDate;
+
+    @JsonFormat(pattern="yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date subscribeDate; //下单时间
+    private String leader; //推荐人
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(Long projectId) {
+        this.projectId = projectId;
+    }
+
+    public String getOpenId() {
+        return openId;
+    }
+
+    public void setOpenId(String openId) {
+        this.openId = openId;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getPostCode() {
+        return postCode;
+    }
+
+    public void setPostCode(String postCode) {
+        this.postCode = postCode;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public Date getUpdateDate() {
+        return updateDate;
+    }
+
+    public void setUpdateDate(Date updateDate) {
+        this.updateDate = updateDate;
+    }
+
+    public Date getSubscribeDate() {
+        return subscribeDate;
+    }
+
+    public void setSubscribeDate(Date subscribeDate) {
+        this.subscribeDate = subscribeDate;
+    }
+
+    public String getLeader() {
+        return leader;
+    }
+
+    public void setLeader(String leader) {
+        this.leader = leader;
+    }
+
+    public String getOrderStatus() {
+        return OrderEnum.getOrderStatus(status);
+    }
+}

@@ -1,0 +1,43 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.meilituibian.api.mapper.ProjectMapper">
+    <sql id="sql_field">
+        project_id as projectId ,category_id as categoryId, category_name as categoryName, short_desc as shortDesc, min_price as minPrice, max_price as maxPrice,detail,operation,treatment,recure,advantage,disadvantage,concern,safe,complex, img_path as imgPath,book_num as bookNum,parent_id as parentCategoryId
+    </sql>
+    <select id="getProjectByCategoryId" parameterType="long" resultType="Project">
+        SELECT <include refid="sql_field"/>
+        FROM Project p , Category c WHERE p.category_id = #{categoryId} and p.category_id = #{categoryId}
+    </select>
+
+    <select id="search" parameterType="string" resultType="Project">
+        SELECT <include refid="sql_field"/> FROM Project p , Category c
+        WHERE p.status=1 and p.category_id = c.id <if test="_parameter != null"> and p.category_name like "%"#{categoryName}"%" </if>
+    </select>
+
+    <select id="getProjectsByCategoryIds"  resultType="Project">
+        SELECT <include refid="sql_field"/>  FROM Project p , Category c
+        WHERE p.status=1 and p.category_id=c.id and  p.category_id in
+        <foreach collection="categoryIds" open="(" separator="," close=")" item="categoryId" index="index">
+            #{categoryId}
+        </foreach>
+
+    </select>
+
+    <select id="getProjectsBySecondCategory" resultType="Project">
+        SELECT <include refid="sql_field"/>  FROM project a,category b
+        WHERE a.category_id = b.id AND b.status=1 AND a.status=1 AND b.parent_id IN
+        <foreach collection="secondIds" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </select>
+
+    <select id="getProjectById" resultType="Project">
+        SELECT <include refid="sql_field"/>  FROM Project p , Category c
+        where p.status=1 and p.project_id = #{id} and p.category_id=c.id
+    </select>
+
+    <update id="updateBookNum" parameterType="long">
+        update Project set book_num = book_num + 1 where project_id = #{id}
+    </update>
+</mapper>

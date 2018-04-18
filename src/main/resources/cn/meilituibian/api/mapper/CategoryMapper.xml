@@ -1,0 +1,36 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.meilituibian.api.mapper.CategoryMapper">
+    <resultMap id="CategoryResultMap" type="Category">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="parent_id" property="parentId"/>
+        <result column="level" property="level"/>
+        <result column="icon" property="icon"/>
+        <result column="hot" property="hot"/>
+    </resultMap>
+
+    <select id="listCategory" resultMap="CategoryResultMap">
+        select id, name, parent_id,grade, icon, hot from category order by grade desc
+    </select>
+
+    <select id="findCategoryById" parameterType="long" resultType="Category">
+        select id,name,hot,parent_id as parentId,icon,major_name as majorName,alias_name as aliasName FROM
+        category where id = #{id}
+    </select>
+
+
+    <select id="getChildCategories" resultType="Category" parameterType="java.util.Map">
+        select id,name,hot,parent_id as parentId,icon,major_name as majorName,alias_name as aliasName FROM
+        category where status = 1 and grade = #{grade}
+        <if test="parentCategoryIds != null">
+            and parent_id in
+            <foreach collection="parentCategoryIds" item="pId" open="(" close=")" separator=",">
+                #{pId}
+            </foreach>
+        </if>
+    </select>
+
+</mapper>
