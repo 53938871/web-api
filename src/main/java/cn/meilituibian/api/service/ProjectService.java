@@ -24,6 +24,7 @@ public class ProjectService {
     @Autowired
     private ProjectMapper projectMapper;
 
+    @Cacheable(value = "meilituibian", key="'project_by_category_' + #categoryId", unless = "#result == null")
     public ProjectDto getProjectByCategoryId(Long categoryId) {
         Project project = projectMapper.getProjectByCategoryId(categoryId);
         if(project == null) {
@@ -54,14 +55,17 @@ public class ProjectService {
         return projectMapper.search(categoryName);
     }
 
+    @Cacheable(value = "meilituibian", unless = "#result.size() < 1")
     public List<Project> getProjectsByCategoryIds(String[] categoryIds) {
         return projectMapper.getProjectsByCategoryIds(categoryIds);
     }
 
+    @Cacheable(value = "meilituibian", unless = "#result.size() < 1")
     public List<Project> getProjectsBySecondCategory(String[] secondIds) {
         return projectMapper.getProjectsBySecondCategory(secondIds);
     }
 
+    @Cacheable(value = "meilituibian", key="'project_by_id_' + #id", unless = "#result == null")
     public Project getProjectById(Long id) {
         return projectMapper.getProjectById(id);
     }

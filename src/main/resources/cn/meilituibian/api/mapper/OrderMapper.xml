@@ -9,13 +9,13 @@
     </insert>
 
     <select id="getOrdersByOpenId" parameterType="long" resultType="Order">
-        select open_id as openId,project_id as projectId,project_name as projectName,user_name as userName,phone,email,subscribeDate, leader,create_date as createDate
+        select id,open_id as openId,project_id as projectId,project_name as projectName,user_name as userName,phone,email,subscribe_date as subscribeDate, leader,create_date as createDate
         from `Order` where open_id=open_id and status != -1 order by subscribe_date desc
     </select>
 
-    <select id="getOrderById" parameterType="long" resultType="Order">
+    <select id="getOrderByIdAndOpenId"  resultType="Order">
         select id, open_id as openId,project_id as projectId,project_name as projectName,user_name as userName,phone, create_date as createDate,subscribe_date as subscribeDate, leader
-        from `Order` where id = #{id}
+        from `Order` where id = #{id} and open_id= #{openId}
     </select>
 
     <update id="updateOrder" parameterType="Order">
@@ -31,7 +31,7 @@
         <if test="updateDate != null">update_date=#{updateDate},</if>
         <if test="subscribeDate != null">subscribe_date=#{subscribeDate},</if>
         </set>
-        where open_id = #{openId}
+        where open_id = #{openId} and id=#{id}
     </update>
 
 </mapper>

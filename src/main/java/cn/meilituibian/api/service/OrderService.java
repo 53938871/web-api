@@ -8,7 +8,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Transactional
@@ -40,7 +42,10 @@ public class OrderService {
         return false;
     }
 
-    public Order getOrderById(Long id) {
-        return orderMapper.getOrderById(id);
+    public Order getOrderByIdAndOpenId(Long id, String openId) {
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("id", id);
+        paramMap.put("openId", openId);
+        return orderMapper.getOrderByIdAndOpenId(paramMap);
     }
 }

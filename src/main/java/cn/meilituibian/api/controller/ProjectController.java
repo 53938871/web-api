@@ -51,6 +51,9 @@ public class ProjectController {
 
     private List<Map<String, Object>> processProjects(List<Project> list) {
         List<Map<String, Object>> result = new ArrayList<>();
+        if (list == null || list.isEmpty()) {
+            return result;
+        }
         for(Project project : list) {
             Map<String, Object> projectMap = new HashMap<>();
             projectMap.put("id", project.getProjectId());

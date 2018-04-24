@@ -17,7 +17,7 @@ public class CategoryService {
     @Autowired
     private CategoryMapper categoryMapper;
 
-    @Cacheable(value = "abcdd", key = "aaaaaa")
+    @Cacheable(value = "meilituibian" ,unless = "#result.size() < 1")
     public List<Map<String, Object>> listCategory() {
         List<Category> categories = categoryMapper.listCategory();
         List<Category> firstCategoryList = new ArrayList<>();
@@ -65,6 +65,7 @@ public class CategoryService {
         return categoryMap;
     }
 
+    @Cacheable(value = "meilituibian", unless = "#result.size() < 1")
     public List<Map<String ,Object>> getFirstCategories() {
         return getCategories(1L, null);
     }
@@ -81,11 +82,13 @@ public class CategoryService {
         return result;
     }
 
+    @Cacheable(value = "meilituibian", unless = "#result.size() < 1")
     public List<Map<String ,Object>> getSecondCategories(String[] parentCategoryIds) {
         return getCategories(2L, parentCategoryIds);
     }
 
 
+    @Cacheable(value = "meilituibian", unless = "#result.size() < 1")
     public List<Map<String ,Object>> getThirdCategories(String[] parentCategoryIds) {
         return getCategories(3L, parentCategoryIds);
     }

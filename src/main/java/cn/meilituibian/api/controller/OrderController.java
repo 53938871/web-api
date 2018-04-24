@@ -50,10 +50,10 @@ public class OrderController {
         return new ResponseEntity<Map<String, String>>(result, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @RequestMapping(value = {"/id/{id}"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/detail/{id}"}, method = RequestMethod.GET)
     @ApiOperation(value = "根据id获得订单信息")
-    public ResponseEntity<?> getOrdersByOpenId(@PathVariable Long id) {
-        Order order = orderService.getOrderById(id);
+    public ResponseEntity<?> getOrdersByOpenId(@PathVariable Long id, @RequestParam(value = "openId", required = true) String openId) {
+        Order order = orderService.getOrderByIdAndOpenId(id, openId);
         if (order == null) {
             ErrorResponse response = new ErrorResponse(404, "找不到此订单");
             return new ResponseEntity<ErrorResponse>(response, HttpStatus.NOT_FOUND);
