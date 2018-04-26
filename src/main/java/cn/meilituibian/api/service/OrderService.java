@@ -7,10 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -47,5 +45,37 @@ public class OrderService {
         paramMap.put("id", id);
         paramMap.put("openId", openId);
         return orderMapper.getOrderByIdAndOpenId(paramMap);
+    }
+
+    public List<Order> getClientOrderByUser(String openId) {
+        return orderMapper.getClientOrderByUser(openId);
+    }
+
+    public Order getOrderById(Long id) {
+        return orderMapper.getOrderById(id);
+    }
+
+    public Map<String, Object> getPerformancesByOpenId(String openId) {
+        Map<String, Object> result = new HashMap<>();
+        List<Order> list = orderMapper.getPerformancesByOpenId(openId);
+        if(list == null || list.isEmpty()) {
+            return Collections.EMPTY_MAP;
+        }
+        result.put("total", list.size());
+        Set<String> openIdSet = list.stream().map(s-> s.getParentOpenId()).collect(Collectors.toSet());
+        Map<String, Object> detail = new HashMap<>();
+        for (String id: openIdSet) {
+            List<Order> orders = new ArrayList<>();
+            for (Order order : list) {
+                if (id.equalsIgnoreCase(order.getParentOpenId())) {
+                    orders.add(order);
+                }
+            }
+            if (!orders.isEmpty()) {
+                detail.put(id, orders);
+            }
+        }
+        result.put("data", detail);
+        return result;
     }
 }

@@ -15,6 +15,7 @@ public class Order implements Serializable {
     private String userName;
     private String projectName;
     private String phone;
+    @JsonIgnore
     private String email;
     @JsonIgnore
     private String address;
@@ -33,7 +34,7 @@ public class Order implements Serializable {
     @JsonFormat(pattern="yyyy-MM-dd")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date subscribeDate; //下单时间
-    private String leader; //推荐人
+    private String parentOpenId; //推荐人
 
     public Long getId() {
         return id;
@@ -51,12 +52,12 @@ public class Order implements Serializable {
         this.projectId = projectId;
     }
 
-    public String getOpenId() {
-        return openId;
+    public String getParentOpenId() {
+        return parentOpenId;
     }
 
-    public void setOpenId(String openId) {
-        this.openId = openId;
+    public void setParentOpenId(String parentOpenId) {
+        this.parentOpenId = parentOpenId;
     }
 
     public String getUserName() {
@@ -139,15 +140,20 @@ public class Order implements Serializable {
         this.subscribeDate = subscribeDate;
     }
 
-    public String getLeader() {
-        return leader;
-    }
-
-    public void setLeader(String leader) {
-        this.leader = leader;
-    }
 
     public String getOrderStatus() {
         return OrderEnum.getOrderStatus(status);
+    }
+
+    public String getOpenId() {
+        return openId;
+    }
+
+    public void setOpenId(String openId) {
+        this.openId = openId;
+    }
+
+    public void setOrderStatus(String orderStatus) {
+        this.orderStatus = orderStatus;
     }
 }

@@ -11,6 +11,9 @@ import java.util.Map;
 public interface OrderMapper {
     Long insertOrder(Order order);
     List<Order> getOrdersByOpenId(String openId);
+    List<Order> getClientOrderByUser(String openId);
+    List<Order> getPerformancesByOpenId(String openId);
     int updateOrder(Order order);
     Order getOrderByIdAndOpenId(Map<String, Object> paramMap);
+    Order getOrderById(Long id);
 }

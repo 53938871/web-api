@@ -8,6 +8,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -51,9 +52,14 @@ public class OrderController {
     }
 
     @RequestMapping(value = {"/detail/{id}"}, method = RequestMethod.GET)
-    @ApiOperation(value = "根据id获得订单信息")
-    public ResponseEntity<?> getOrdersByOpenId(@PathVariable Long id, @RequestParam(value = "openId", required = true) String openId) {
-        Order order = orderService.getOrderByIdAndOpenId(id, openId);
+    @ApiOperation(value = "根据订单id或(open id 和订单id)获得订单信息")
+    public ResponseEntity<?> getOrdersByOpenId(@PathVariable Long id, @RequestParam(value = "openId", required = false) String openId) {
+        Order order = null;
+        if (StringUtils.isEmpty(openId)) {
+            order = orderService.getOrderById(id);
+        } else {
+            order = orderService.getOrderByIdAndOpenId(id, openId);
+        }
         if (order == null) {
             ErrorResponse response = new ErrorResponse(404, "找不到此订单");
             return new ResponseEntity<ErrorResponse>(response, HttpStatus.NOT_FOUND);
@@ -61,5 +67,17 @@ public class OrderController {
         return new ResponseEntity<Order>(order, HttpStatus.OK);
     }
 
+    @RequestMapping(value = {"/client-orders/{openId}"}, method = RequestMethod.GET)
+    @ApiOperation(value = "根据open id获得此open id的所有推荐客户的订单信息")
+    public ResponseEntity<?> getClientOrdersByOpenId(@PathVariable String openId) {
+        List<Order> orders = orderService.getClientOrderByUser(openId);
+        return new ResponseEntity<List<Order>>(orders, HttpStatus.OK);
+    }
 
+    @RequestMapping(value = {"/performances/{openId}"}, method = RequestMethod.GET)
+    @ApiOperation(value = "根据open id查询此用户的业绩")
+    public ResponseEntity<?> getPerformancesByOpenId(@PathVariable String openId) {
+        Map<String, Object> result = orderService.getPerformancesByOpenId(openId);
+        return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
+    }
 }
