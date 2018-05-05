@@ -23,6 +23,7 @@ public class ProjectDto implements Serializable{
     private float safe;
     private float concern;
     private float complex;
+    private String content;
 
     public Long getProjectId() {
         return projectId;
@@ -150,5 +151,13 @@ public class ProjectDto implements Serializable{
 
     public void setImgPath(String imgPath) {
         this.imgPath = imgPath;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 }

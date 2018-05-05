@@ -16,4 +16,5 @@ public interface OrderMapper {
     int updateOrder(Order order);
     Order getOrderByIdAndOpenId(Map<String, Object> paramMap);
     Order getOrderById(Long id);
+    List<Order> getOrders(Map<String, Object> paramMap);
 }

@@ -21,6 +21,7 @@ public class Project implements Serializable{
     private BigDecimal minPrice;
     private BigDecimal maxPrice;
     private int bookNum;
+    private String content;
 
     private Long parentCategoryId;
 
@@ -166,5 +167,13 @@ public class Project implements Serializable{
 
     public void setBookNum(int bookNum) {
         this.bookNum = bookNum;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 }

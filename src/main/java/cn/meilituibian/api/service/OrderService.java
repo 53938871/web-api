@@ -78,4 +78,9 @@ public class OrderService {
         result.put("data", detail);
         return result;
     }
+
+    public List<Order> getOrders(Map<String, Object> paramMap) {
+        List<Order> list = orderMapper.getOrders(paramMap);
+        return list;
+    }
 }

@@ -31,7 +31,7 @@ public class ProjectService {
             return null;
         }
         ProjectDto projectDto = new ProjectDto();
-        String[] properties = {"projectId","categoryId","categoryName","detail","safe","concern","complex", "shortDesc", "imgPath"};
+        String[] properties = {"projectId","categoryId","categoryName","detail","safe","concern","complex", "shortDesc", "imgPath", "content", "minPrice","maxPrice", "content"};
         String[] jsonProperties = {"operation", "treatment", "recure", "advantage","disadvantage"};
         PropertyUtilsBean propertyUtilsBean = new PropertyUtilsBean();
         ObjectMapper mapper = new ObjectMapper();

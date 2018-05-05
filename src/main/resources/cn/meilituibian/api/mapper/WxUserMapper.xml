@@ -5,7 +5,7 @@
 <mapper namespace="cn.meilituibian.api.mapper.WxUserMapper">
     <sql id="select_wx_user">
         select user_id as userId,open_id as openId,nick_name as nickName,sex, country, city,province,head_url as headUrl,
-         remark, subscribe from Wx_User
+         remark, subscribe, user_type as userType from Wx_User
     </sql>
 
     <select id="getWxUserById" parameterType="long" resultType="WxUser">
@@ -17,8 +17,8 @@
     </select>
 
     <insert id="insertWxUser" keyColumn="user_id" useGeneratedKeys="true" parameterType="WxUser">
-        insert into wx_user(open_id,nick_name,sex,country,city,province,head_url,remark,subscribe,create_time)
-        values(#{openId}, #{nickName}, #{sex}, #{country}, #{city}, #{province}, #{head_url}, #{remark}, #{subscribe}, now())
+        insert into wx_user(open_id,nick_name,sex,country,city,province,head_url,remark,subscribe,create_time, user_type)
+        values(#{openId}, #{nickName}, #{sex}, #{country}, #{city}, #{province}, #{head_url}, #{remark}, #{subscribe}, now(), #{userType})
     </insert>
 
     <update id="updateWxUser">
@@ -31,6 +31,7 @@
             <if test="province != null">province=#{province},</if>
             <if test="head_url != null">head_url=#{headUrl},</if>
             <if test="remark != null">remark=#{remark},</if>
+            <if test="userType != null">user_type=#{userType},</if>
         </set>
         where open_id=#{openId}
     </update>

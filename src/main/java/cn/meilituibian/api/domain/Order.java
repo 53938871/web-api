@@ -5,15 +5,19 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
 
 public class Order implements Serializable {
     private Long id;
+    @NotNull(message = "项目Id不能为空")
     private Long projectId;
+    @NotNull(message = "openId不能为空")
     private String openId;
     private String userName;
     private String projectName;
+    @NotNull(message = "联系电话不能为空")
     private String phone;
     @JsonIgnore
     private String email;
@@ -31,6 +35,7 @@ public class Order implements Serializable {
     @JsonFormat(pattern="yyyy-MM-dd")
     private Date updateDate;
 
+    @NotNull(message = "预约日期不能为空")
     @JsonFormat(pattern="yyyy-MM-dd")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date subscribeDate; //下单时间

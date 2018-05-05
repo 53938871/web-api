@@ -4,7 +4,7 @@
 
 <mapper namespace="cn.meilituibian.api.mapper.OrderMapper">
     <sql id="fields">
-        id,open_id as openId,project_id as projectId,project_name as projectName,user_name as userName,phone,subscribe_date as subscribeDate, parent_open_id as parentOpenId,create_date as createDate
+        id,open_id as openId,project_id as projectId,project_name as projectName,user_name as userName,phone,subscribe_date as subscribeDate, parent_open_id as parentOpenId,create_date as createDate,status
     </sql>
     <insert id="insertOrder" parameterType="Order" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
          insert into `Order`(open_id,project_id,project_name,user_name,phone,email,subscribe_date,parent_open_id,create_date)
@@ -47,12 +47,25 @@
     </select>
 
     <sql id="short_field">
-        id,project_id as projectId,project_name as projectName,phone,subscribe_date as subscribeDate,parent_open_id as parentOpenId
+        id,project_id as projectId,project_name as projectName,phone,subscribe_date as subscribeDate,parent_open_id as parentOpenId,status
     </sql>
     <select id="getPerformancesByOpenId" resultType="Order">
         SELECT <include refid="short_field"/>  FROM `order` a WHERE a.parent_open_id=#{openId}
         UNION ALL SELECT <include refid="short_field"/> FROM `order` b WHERE EXISTS (SELECT 1 FROM `order` a WHERE a.parent_open_id=#{openId} AND a.`open_id` = b.parent_open_id )
 
+    </select>
+
+    <select id="getOrders" resultType="Order">
+        select <include refid="short_field"/> from `order`
+        <where>
+            <if test="openId != null">
+                open_id = #{openId}
+            </if>
+            <if test="status != null">
+                and status = #{status}
+            </if>
+
+        </where>
     </select>
 
 </mapper>

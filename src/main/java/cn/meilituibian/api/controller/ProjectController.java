@@ -65,6 +65,7 @@ public class ProjectController {
             projectMap.put("categoryId", project.getCategoryId());
             projectMap.put("categoryParentId", project.getParentCategoryId());
             projectMap.put("bookNum", project.getBookNum());
+            projectMap.put("content", project.getContent());
             result.add(projectMap);
         }
         return result;

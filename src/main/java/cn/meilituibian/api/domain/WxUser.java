@@ -17,6 +17,7 @@ public class WxUser implements Serializable{
     private String headUrl;
     private boolean subscribe;
     private String remark;
+    private int userType;
 
     public Long getUserId() {
         return userId;
@@ -96,5 +97,13 @@ public class WxUser implements Serializable{
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public int getUserType() {
+        return userType;
+    }
+
+    public void setUserType(int userType) {
+        this.userType = userType;
     }
 }

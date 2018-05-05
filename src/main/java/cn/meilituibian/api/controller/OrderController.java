@@ -9,8 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,11 +27,17 @@ public class OrderController {
 
     @RequestMapping(value = {"/save"}, method = RequestMethod.POST)
     @ApiOperation(value = "保存订单信息")
-    public ResponseEntity<?> insertOrder(Order order) {
-        Long id = orderService.insertOrder(order);
-        Map<String, Object> result = new HashMap<>();
-        result.put("id", id);
-        return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
+    public ResponseEntity<?> insertOrder(@Valid @RequestBody Order order, BindingResult bindingResult) {
+        if(bindingResult.hasErrors()) {
+            String errorMsg = bindingResult.getFieldError().getDefaultMessage();
+            ErrorResponse errorResponse = new ErrorResponse(400, errorMsg);
+            return new ResponseEntity<ErrorResponse>(errorResponse, HttpStatus.BAD_REQUEST);
+        }else {
+            Long id = orderService.insertOrder(order);
+            Map<String, Object> result = new HashMap<>();
+            result.put("id", id);
+            return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
+        }
     }
 
     @RequestMapping(value = {"/{openId}"}, method = RequestMethod.GET)
@@ -41,7 +49,7 @@ public class OrderController {
 
     @RequestMapping(value = {"/update"}, method = RequestMethod.POST)
     @ApiOperation(value = "更新订单信息")
-    public ResponseEntity<?> updateOrder(Order order) {
+    public ResponseEntity<?> updateOrder(@RequestBody Order order) {
         boolean success = orderService.updateOrder(order);
         if (success) {
             return new ResponseEntity<Order>(order, HttpStatus.OK);
@@ -79,5 +87,16 @@ public class OrderController {
     public ResponseEntity<?> getPerformancesByOpenId(@PathVariable String openId) {
         Map<String, Object> result = orderService.getPerformancesByOpenId(openId);
         return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = {"/list"}, method = RequestMethod.GET)
+    @ApiOperation(value = "根据open id,订单状态status或两者查询用户的订单,如/list?openId=1&status=0, /list?openId=1, /list?status=1")
+    public ResponseEntity<?> getOrders(@RequestParam(value = "openId", required = false) String openId,
+                                       @RequestParam(value = "status", required = false) Integer stauts) {
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("openId", openId);
+        paramMap.put("status", stauts);
+        List<Order> list = orderService.getOrders(paramMap);
+        return new ResponseEntity<List<Order>>(list, HttpStatus.OK);
     }
 }
