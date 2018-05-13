@@ -8,6 +8,9 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 public class WxUserService {
@@ -32,7 +35,17 @@ public class WxUserService {
         return wxUser;
     }
 
+    @Transactional
     public Long insertWxUser(WxUser wxUser) {
         return wxUserMapper.insertWxUser(wxUser);
+    }
+
+    public List<WxUser> selectChildUser(String openId){
+        return wxUserMapper.selectChildUser(openId);
+    }
+
+    @Transactional
+    public void updateWxUser(WxUser wxUser) {
+        wxUserMapper.updateWxUser(wxUser);
     }
 }

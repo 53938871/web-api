@@ -3,39 +3,54 @@ package cn.meilituibian.api.controller;
 import cn.meilituibian.api.domain.WxUser;
 import cn.meilituibian.api.service.WxUserService;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
+@RequestMapping("/users")
 @Api(value="weixin user info", description="微信用户信息")
 public class WxUserController {
     @Autowired
     private WxUserService wxUserService;
 
-    @RequestMapping(value = "/users/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/id/{id}", method = RequestMethod.GET)
     @ApiOperation(value = "根据id查找用户",response = WxUser.class)
-    @ApiImplicitParam(name = "user_id", value = "user_id", required = true, paramType = "Long")
-    public WxUser getUserById(@PathVariable Long user_id) {
+    public WxUser getUserById(@PathVariable("id") Long user_id) {
         return wxUserService.getUserById(user_id);
     }
 
-    @RequestMapping(value = "/users", method = RequestMethod.GET)
+    @RequestMapping(value = "", method = RequestMethod.GET)
     @ApiOperation(value = "根据openid查找用户",response = WxUser.class)
-    @ApiImplicitParam(name = "open_id", value = "open_id", required = true, paramType = "String")
-    public WxUser getUserByOpenId(@RequestParam("open_id") String openId) {
+    public WxUser getUserByOpenId(@RequestParam(value = "open_id", required = true) String openId) {
         return wxUserService.getUserByOpenId(openId);
     }
 
-    @RequestMapping(value = "/users/save", method = RequestMethod.GET)
+    @RequestMapping(value = "/save", method = RequestMethod.POST)
     @ApiOperation(value = "保存用户信息",response = Long.class)
-    @ApiImplicitParam(name = "WxUser", required = true, paramType = "WxUser")
-    public Long insertWxUser(WxUser wxUser) {
+    public Long insertWxUser(@RequestBody WxUser wxUser) {
         Long userId = wxUserService.insertWxUser(wxUser);
         return userId;
     }
 
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    @ApiOperation(value = "保存用户信息",response = Long.class)
+    public ResponseEntity<?> updateWxUser(@RequestBody WxUser wxUser) {
+        Long userId = wxUserService.insertWxUser(wxUser);
+        WxUser user = wxUserService.getUserById(wxUser.getUserId());
+        return new ResponseEntity<WxUser>(user, HttpStatus.OK);
+    }
+
     //@Transactional(propagation = Propagation.REQUIRED,isolation = Isolation.DEFAULT,timeout=36000,rollbackFor=Exception.class)
+
+    @RequestMapping(value = "/children", method = RequestMethod.GET)
+    @ApiOperation(value = "根据自己的openId查询下级人员信息")
+    public ResponseEntity<?> selectChildrenUser(@RequestParam(value = "openId", required = true) String openId) {
+        List<WxUser> list = wxUserService.selectChildUser(openId);
+        return new ResponseEntity<List<WxUser>>(list, HttpStatus.OK);
+    }
 }
