@@ -9,8 +9,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.DigestUtils;
+import org.springframework.util.StringUtils;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import static cn.meilituibian.api.common.Constants.USER_TYPE_MERCHAT;
 
 @Service
 public class WxUserService {
@@ -36,8 +42,15 @@ public class WxUserService {
     }
 
     @Transactional
-    public Long insertWxUser(WxUser wxUser) {
-        return wxUserMapper.insertWxUser(wxUser);
+    public WxUser insertWxUser(WxUser wxUser) {
+        String password = null;
+        if (wxUser.getUserType() == USER_TYPE_MERCHAT) { //商家
+            password = wxUser.getPhone().substring(wxUser.getPhone().length() - 6);
+            wxUser.setPassword(DigestUtils.md5DigestAsHex(password.getBytes()));
+        }
+        Long id = wxUserMapper.insertWxUser(wxUser);
+        wxUser.setPassword(password);
+        return wxUser;
     }
 
     public List<WxUser> selectChildUser(String openId){
@@ -46,6 +59,23 @@ public class WxUserService {
 
     @Transactional
     public void updateWxUser(WxUser wxUser) {
+        if (StringUtils.isEmpty(wxUser.getPassword())) {
+            String md5Password = DigestUtils.md5DigestAsHex(wxUser.getPassword().getBytes());
+            wxUser.setPassword(md5Password);
+        }
         wxUserMapper.updateWxUser(wxUser);
+    }
+
+    public WxUser login(String phone, String password) {
+        String md5Password = DigestUtils.md5DigestAsHex(password.getBytes());
+        Map<String, String> map = new HashMap<>();
+        map.put("phone", phone);
+        map.put("password", md5Password);
+        WxUser wxUser = wxUserMapper.login(map);
+        return wxUser;
+    }
+
+    public WxUser findWxUserByPhone(String phone) {
+        return wxUserMapper.findWxUserByPhone(phone);
     }
 }

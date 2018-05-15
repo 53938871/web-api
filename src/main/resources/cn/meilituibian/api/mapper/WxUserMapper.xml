@@ -8,17 +8,17 @@
         remark,create_time as createTime,user_type as userType,contract_no as contractNo,parent,number_id as numberId,phone,address from Wx_User
     </sql>
 
-    <select id="getWxUserById" parameterType="long" resultType="WxUser">
+    <select id="getWxUserById" parameterType="long" resultType="cn.meilituibian.api.domain.WxUser">
         <include refid="select_wx_user"/>  where user_id=#{id}
     </select>
 
-    <select id="getWxUserByOpenId" parameterType="String" resultType="WxUser">
+    <select id="getWxUserByOpenId" parameterType="String" resultType="cn.meilituibian.api.domain.WxUser">
         <include refid="select_wx_user"/>  where open_id=#{openId}
     </select>
 
-    <insert id="insertWxUser" keyColumn="user_id" useGeneratedKeys="true" parameterType="WxUser">
-        insert into wx_user(open_id,nick_name,sex,city,province,head_url,remark,create_time,user_type,contract_no,parent,number_id,phone,address)
-        values(#{openId},#{nickName},#{sex},#{city},#{province},#{headUrl},#{remark},#{createTime},#{userType},#{contractNo},#{parent},#{numberId},#{phone},#{address})
+    <insert id="insertWxUser" keyColumn="user_id" keyProperty="userId" useGeneratedKeys="true" parameterType="cn.meilituibian.api.domain.WxUser">
+        insert into wx_user(open_id,nick_name,sex,city,province,head_url,remark,create_time,user_type,contract_no,parent,number_id,phone,address,password)
+        values(#{openId},#{nickName},#{sex},#{city},#{province},#{headUrl},#{remark},#{createTime},#{userType},#{contractNo},#{parent},#{numberId},#{phone},#{address},#{password})
     </insert>
 
     <update id="updateWxUser" >
@@ -35,11 +35,20 @@
             <if test="phone != null">phone=#{phone},</if>
             <if test="address != null">address=#{address},</if>
             <if test="numberId != null">numberId=#{numberId},</if>
+            <if test="password != null">password=#{password},</if>
         </set>
         where open_id=#{openId}
     </update>
 
-    <select id="selectChildUser" resultType="WxUser">
+    <select id="selectChildUser" resultType="cn.meilituibian.api.domain.WxUser">
         <include refid="select_wx_user"/> where parent=#{openId}
+    </select>
+    
+    <select id="login" resultType="cn.meilituibian.api.domain.WxUser">
+        <include refid="select_wx_user"/> where phone=#{phone} and password=#{password}
+    </select>
+
+    <select id="findWxUserByPhone" resultType="cn.meilituibian.api.domain.WxUser">
+        select user_id as userId from wx_user where phone=#{phone}
     </select>
 </mapper>

@@ -6,7 +6,7 @@
     <sql id="fields">
         id,open_id as openId,project_id as projectId,project_name as projectName,user_name as userName,phone,subscribe_date as subscribeDate, parent_open_id as parentOpenId,create_date as createDate,status
     </sql>
-    <insert id="insertOrder" parameterType="Order" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+    <insert id="insertOrder" parameterType="cn.meilituibian.api.domain.Order" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
          insert into `Order`(open_id,project_id,project_name,user_name,phone,email,subscribe_date,parent_open_id,create_date)
          values(#{openId}, #{projectId}, #{projectName}, #{userName}, #{phone}, #{email}, #{subscribeDate}, #{parentOpenId}, #{createDate})
     </insert>

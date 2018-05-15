@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class WxUser implements Serializable{
-    @JsonIgnore
+
     private String password;
     private Long userId;
     private String openId;
@@ -190,4 +190,6 @@ public class WxUser implements Serializable{
     public void setStatus(int status) {
         this.status = status;
     }
+
+
 }

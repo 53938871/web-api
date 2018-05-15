@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface WxUserMapper {
@@ -17,4 +18,9 @@ public interface WxUserMapper {
     List<WxUser> selectChildUser(String openId);
 
     void updateWxUser(WxUser wxUser);
+
+    //登录
+    WxUser login(Map<String, String> map);
+
+    WxUser findWxUserByPhone(String phone);
 }
