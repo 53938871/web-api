@@ -74,14 +74,14 @@ public class WxUserController {
         String phone = wxUser.getPhone();
         String password = wxUser.getPassword();
         if (StringUtils.isEmpty(phone) || StringUtils.isEmpty(password)) {
-            ErrorResponseEntity errorResponseEntity = ErrorResponseEntity.fail(null, HttpStatus.BAD_REQUEST.value(), "手机和密码不能为空");
+            ErrorResponseEntity errorResponseEntity = ErrorResponseEntity.fail(wxUser, HttpStatus.BAD_REQUEST.value(), "手机和密码不能为空");
             return new ResponseEntity<ErrorResponseEntity>(errorResponseEntity, HttpStatus.BAD_REQUEST);
         }
         WxUser user = wxUserService.login(phone, password);
         if (user == null) {
-            ErrorResponseEntity errorResponseEntity = ErrorResponseEntity.fail(null, HttpStatus.NOT_FOUND.value(), "错误的手机号或密码");
+            ErrorResponseEntity errorResponseEntity = ErrorResponseEntity.fail(wxUser, HttpStatus.NOT_FOUND.value(), "错误的手机号或密码");
             return new ResponseEntity<ErrorResponseEntity>(errorResponseEntity, HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<WxUser>(wxUser, HttpStatus.OK);
+        return new ResponseEntity<WxUser>(user, HttpStatus.OK);
     }
 }
