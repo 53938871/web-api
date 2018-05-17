@@ -11,7 +11,10 @@ public class WxUser implements Serializable{
     private String password;
     private Long userId;
     private String openId;
-    private String nickName;
+    private String userName; //用户名，用来登录
+    private String shopName; //店名
+    private String contact;//联系人
+    private String taxpayerCode; //纳税人编号
     private int sex;  //0女，1男
     private String sexName;
     private String city; //城市
@@ -30,6 +33,7 @@ public class WxUser implements Serializable{
     private String numberId;
     private int status; //0：末审核，1：已审核
     private String statusName; //0：末审核，1：已审核
+    private String businessLicense; //营业执照
 
     public String getStatusName() {
         return this.status == 0 ? "末审核" : "已审核";
@@ -61,14 +65,6 @@ public class WxUser implements Serializable{
 
     public void setOpenId(String openId) {
         this.openId = openId;
-    }
-
-    public String getNickName() {
-        return nickName;
-    }
-
-    public void setNickName(String nickName) {
-        this.nickName = nickName;
     }
 
     public int getSex() {
@@ -191,5 +187,43 @@ public class WxUser implements Serializable{
         this.status = status;
     }
 
+    public String getUserName() {
+        return userName;
+    }
 
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getShopName() {
+        return shopName;
+    }
+
+    public void setShopName(String shopName) {
+        this.shopName = shopName;
+    }
+
+    public String getContact() {
+        return contact;
+    }
+
+    public void setContact(String contact) {
+        this.contact = contact;
+    }
+
+    public String getTaxpayerCode() {
+        return taxpayerCode;
+    }
+
+    public void setTaxpayerCode(String taxpayerCode) {
+        this.taxpayerCode = taxpayerCode;
+    }
+
+    public String getBusinessLicense() {
+        return businessLicense;
+    }
+
+    public void setBusinessLicense(String businessLicense) {
+        this.businessLicense = businessLicense;
+    }
 }

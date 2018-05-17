@@ -4,8 +4,8 @@
 
 <mapper namespace="cn.meilituibian.api.mapper.WxUserMapper">
     <sql id="select_wx_user">
-        select user_id as userId,open_id as openId,nick_name as nickName,sex as sex,city,province,head_url as headUrl,
-        remark,create_time as createTime,user_type as userType,contract_no as contractNo,parent,number_id as numberId,phone,address from Wx_User
+        select user_id as userId,open_id as openId,user_name as userName, shop_name as shopName,contact,sex as sex,city,province,remark,create_time as createTime,user_type as userType,
+        contract_no as contractNo,parent,number_id as numberId,phone,address, password,taxpayer_code as taxpayerCode,business_license as businessLicense from Wx_User
     </sql>
 
     <select id="getWxUserById" parameterType="long" resultType="cn.meilituibian.api.domain.WxUser">
@@ -17,14 +17,16 @@
     </select>
 
     <insert id="insertWxUser" keyColumn="user_id" keyProperty="userId" useGeneratedKeys="true" parameterType="cn.meilituibian.api.domain.WxUser">
-        insert into wx_user(open_id,nick_name,sex,city,province,head_url,remark,create_time,user_type,contract_no,parent,number_id,phone,address,password)
-        values(#{openId},#{nickName},#{sex},#{city},#{province},#{headUrl},#{remark},#{createTime},#{userType},#{contractNo},#{parent},#{numberId},#{phone},#{address},#{password})
+        insert into wx_user(open_id,user_name,shop_name,contact,sex,city,province,remark,create_time,user_type,contract_no,parent,number_id,phone,address,password,taxpayer_code,business_license)
+        values(#{openId},#{userName},#{shopName},#{contact},#{sex},#{city},#{province},#{remark},#{createTime},#{userType},#{contractNo},#{parent},#{numberId},#{phone},#{address},#{password},#{taxpayerCode},#{businessLicense})
     </insert>
 
     <update id="updateWxUser" >
         update wx_user
         <set>
-            <if test="nickName != null">nick_name=#{nickName},</if>
+            <if test="userName != null">user_name=#{userName},</if>
+            <if test="shopName != null">shop_name=#{shopName},</if>
+            <if test="contact != null">contact=#{contact},</if>
             <if test="sex != null">sex=#{sex},</if>
             <if test="city != null">city=#{city},</if>
             <if test="province != null">province=#{province},</if>
@@ -36,6 +38,7 @@
             <if test="address != null">address=#{address},</if>
             <if test="numberId != null">numberId=#{numberId},</if>
             <if test="password != null">password=#{password},</if>
+            <if test="taxpayerCode != null">taxpayer_code=#{taxpayerCode},</if>
         </set>
         where open_id=#{openId}
     </update>
@@ -45,10 +48,10 @@
     </select>
     
     <select id="login" resultType="cn.meilituibian.api.domain.WxUser">
-        <include refid="select_wx_user"/> where phone=#{phone} and password=#{password}
+        <include refid="select_wx_user"/> where user_name=#{userName} and password=#{password}
     </select>
 
     <select id="findWxUserByPhone" resultType="cn.meilituibian.api.domain.WxUser">
-        select user_id as userId from wx_user where phone=#{phone}
+        select user_id as userId from wx_user where user_name=#{userName}
     </select>
 </mapper>

@@ -66,10 +66,10 @@ public class WxUserService {
         wxUserMapper.updateWxUser(wxUser);
     }
 
-    public WxUser login(String phone, String password) {
+    public WxUser login(String userName, String password) {
         String md5Password = DigestUtils.md5DigestAsHex(password.getBytes());
         Map<String, String> map = new HashMap<>();
-        map.put("phone", phone);
+        map.put("userName", userName);
         map.put("password", md5Password);
         WxUser wxUser = wxUserMapper.login(map);
         return wxUser;

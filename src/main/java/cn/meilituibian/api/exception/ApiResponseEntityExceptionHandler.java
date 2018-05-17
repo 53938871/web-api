@@ -1,5 +1,7 @@
 package cn.meilituibian.api.exception;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -13,10 +15,12 @@ import java.util.Date;
 @ControllerAdvice
 @RestController
 public class ApiResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ApiResponseEntityExceptionHandler.class);
     @ExceptionHandler(Exception.class)
     public final ResponseEntity<ExceptionResponse> handleAllException(Exception ex , WebRequest request) {
         ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), ex.getMessage(),
                 request.getDescription(false));
+        LOGGER.error(ex.getMessage());
         return new ResponseEntity<>(exceptionResponse, HttpStatus.SERVICE_UNAVAILABLE);
     }
 
@@ -24,6 +28,7 @@ public class ApiResponseEntityExceptionHandler extends ResponseEntityExceptionHa
     public final ResponseEntity<ExceptionResponse> handleApiException(ApiException ex, WebRequest request) {
         ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), ex.getMessage(),
                 request.getDescription(false));
+        LOGGER.error(ex.getMessage());
         return new ResponseEntity<>(exceptionResponse, ex.getHttpStatus());
     }
 }

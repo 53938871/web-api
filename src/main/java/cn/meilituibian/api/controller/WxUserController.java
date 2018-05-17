@@ -38,13 +38,17 @@ public class WxUserController {
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     @ApiOperation(value = "保存用户信息 userType(0:普通用户,1:商家)",response = Long.class)
     public ResponseEntity<?> insertWxUser(@RequestBody WxUser wxUser) {
+        if (StringUtils.isEmpty(wxUser.getUserName())) {
+            ErrorResponseEntity entity = ErrorResponseEntity.fail(wxUser, HttpStatus.BAD_REQUEST.value(), "用户名不能为空");
+            return new ResponseEntity<ErrorResponseEntity>(entity, HttpStatus.BAD_REQUEST);
+        }
         if (StringUtils.isEmpty(wxUser.getPhone())) {
             ErrorResponseEntity entity = ErrorResponseEntity.fail(wxUser, HttpStatus.BAD_REQUEST.value(), "手机号码不能为空");
             return new ResponseEntity<ErrorResponseEntity>(entity, HttpStatus.BAD_REQUEST);
         }
-        WxUser tempUser = wxUserService.findWxUserByPhone(wxUser.getPhone());
+        WxUser tempUser = wxUserService.findWxUserByPhone(wxUser.getUserName());
         if (tempUser != null) {
-            ErrorResponseEntity entity = ErrorResponseEntity.fail(wxUser, HttpStatus.BAD_REQUEST.value(), "此手机号码已存在");
+            ErrorResponseEntity entity = ErrorResponseEntity.fail(wxUser, HttpStatus.BAD_REQUEST.value(), "此用户名已存在");
             return new ResponseEntity<ErrorResponseEntity>(entity, HttpStatus.BAD_REQUEST);
         }
         WxUser currentUser = wxUserService.insertWxUser(wxUser);
@@ -69,17 +73,17 @@ public class WxUserController {
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    @ApiOperation(value = "用户登录，根据手机号phone和密码password登录")
+    @ApiOperation(value = "用户登录，根据用户名userName和密码password登录")
     public ResponseEntity<?> login(@RequestBody WxUser wxUser) {
-        String phone = wxUser.getPhone();
+        String userName = wxUser.getUserName();
         String password = wxUser.getPassword();
-        if (StringUtils.isEmpty(phone) || StringUtils.isEmpty(password)) {
-            ErrorResponseEntity errorResponseEntity = ErrorResponseEntity.fail(wxUser, HttpStatus.BAD_REQUEST.value(), "手机和密码不能为空");
+        if (StringUtils.isEmpty(userName) || StringUtils.isEmpty(password)) {
+            ErrorResponseEntity errorResponseEntity = ErrorResponseEntity.fail(wxUser, HttpStatus.BAD_REQUEST.value(), "用户名和密码不能为空");
             return new ResponseEntity<ErrorResponseEntity>(errorResponseEntity, HttpStatus.BAD_REQUEST);
         }
-        WxUser user = wxUserService.login(phone, password);
+        WxUser user = wxUserService.login(userName, password);
         if (user == null) {
-            ErrorResponseEntity errorResponseEntity = ErrorResponseEntity.fail(wxUser, HttpStatus.NOT_FOUND.value(), "错误的手机号或密码");
+            ErrorResponseEntity errorResponseEntity = ErrorResponseEntity.fail(wxUser, HttpStatus.NOT_FOUND.value(), "错误的用户名或密码");
             return new ResponseEntity<ErrorResponseEntity>(errorResponseEntity, HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<WxUser>(user, HttpStatus.OK);
