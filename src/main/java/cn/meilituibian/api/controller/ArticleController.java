@@ -6,6 +6,7 @@ import cn.meilituibian.api.domain.Comment;
 import cn.meilituibian.api.service.ArticleService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageInfo;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@Api(value="文章信息", description="文章信息")
 @RequestMapping(value = "/articles")
 public class ArticleController {
     @Autowired
