@@ -15,9 +15,7 @@ import org.springframework.util.DigestUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static cn.meilituibian.api.common.Constants.USER_TYPE_MERCHAT;
 
@@ -104,5 +102,23 @@ public class WxUserService {
         JSONObject userInfoJson = JSONObject.parseObject(userInfo);
         userInfoJson.put("access_token", accessToken);
         return userInfoJson;
+    }
+
+    public JSONObject getSignature(String accessToken, String noncestr, String timestamp, String url) {
+        String jsapiUrl = wxProperties.getJsapiUrl();
+        jsapiUrl = String.format(jsapiUrl, accessToken);
+        String jsapiTicket = restTemplate.getForObject(jsapiUrl, String.class);
+        JSONObject jsapiTicketJson = JSONObject.parseObject(jsapiTicket);
+        int errorcode = jsapiTicketJson.getIntValue("errcode");
+        if (errorcode != 0) {
+            return jsapiTicketJson;
+        }
+        String ticket = jsapiTicketJson.getString("ticket");
+        SortedMap<String,String> parameters = new TreeMap<>();
+        parameters.put("jsapi_ticket", ticket);
+        parameters.put("noncestr", noncestr);
+        parameters.put("timestamp", timestamp);
+        parameters.put("url", url);
+        return null;
     }
 }

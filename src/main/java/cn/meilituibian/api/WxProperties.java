@@ -13,6 +13,9 @@ public class WxProperties {
     @Value("${wx.userinfo.url}")
     private String userInfoUrl;
 
+    @Value("${wx.jsapi.url}")
+    private String jsapiUrl;
+
     public String getAccessTokenUrl() {
         return accessTokenUrl;
     }
@@ -27,5 +30,13 @@ public class WxProperties {
 
     public void setUserInfoUrl(String userInfoUrl) {
         this.userInfoUrl = userInfoUrl;
+    }
+
+    public String getJsapiUrl() {
+        return jsapiUrl;
+    }
+
+    public void setJsapiUrl(String jsapiUrl) {
+        this.jsapiUrl = jsapiUrl;
     }
 }
