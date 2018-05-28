@@ -47,7 +47,7 @@
     </select>
 
     <sql id="short_field">
-        id,project_id as projectId,project_name as projectName,phone,subscribe_date as subscribeDate,parent_open_id as parentOpenId,status
+        id,open_id as openId,user_name as userName,project_id as projectId,project_name as projectName,phone,subscribe_date as subscribeDate,parent_open_id as parentOpenId,status
     </sql>
     <select id="getPerformancesByOpenId" resultType="Order">
         SELECT <include refid="short_field"/>  FROM `order` a WHERE a.parent_open_id=#{openId}

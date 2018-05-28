@@ -4,6 +4,7 @@ import cn.meilituibian.api.domain.WxUser;
 import cn.meilituibian.api.exception.ErrorResponseEntity;
 import cn.meilituibian.api.exception.ExceptionResponse;
 import cn.meilituibian.api.service.WxUserService;
+import com.alibaba.fastjson.JSONObject;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,4 +89,13 @@ public class WxUserController {
         }
         return new ResponseEntity<WxUser>(user, HttpStatus.OK);
     }
+
+    @RequestMapping(value = "/wx", method = RequestMethod.GET)
+    @ApiOperation(value = "获取微信用户信息")
+    public ResponseEntity<?> getWxInfo(@RequestParam("code") String code, @RequestParam String appid,
+                                       @RequestParam("secret") String secret) {
+        JSONObject result = wxUserService.getWxUserInfo(appid, secret, code);
+        return new ResponseEntity<JSONObject>(result, HttpStatus.OK);
+    }
+
 }

@@ -1,8 +1,10 @@
 package cn.meilituibian.api.service;
 
+import cn.meilituibian.api.WxProperties;
 import cn.meilituibian.api.domain.WxUser;
 import cn.meilituibian.api.exception.ApiException;
 import cn.meilituibian.api.mapper.WxUserMapper;
+import com.alibaba.fastjson.JSONObject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
 import org.springframework.util.StringUtils;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
 import java.util.List;
@@ -23,6 +26,12 @@ public class WxUserService {
     private static final Logger logger = LogManager.getLogger(WxUserService.class);
     @Autowired
     private WxUserMapper wxUserMapper;
+
+    @Autowired
+    private WxProperties wxProperties;
+
+    @Autowired
+    private RestTemplate restTemplate;
 
     public WxUser getUserById(Long user_id) {
         WxUser user = wxUserMapper.getWxUserById(user_id);
@@ -77,5 +86,23 @@ public class WxUserService {
 
     public WxUser findWxUserByPhone(String phone) {
         return wxUserMapper.findWxUserByPhone(phone);
+    }
+
+    public JSONObject getWxUserInfo(String appid, String secret, String code) {
+        String tokenUrl = wxProperties.getAccessTokenUrl();
+        tokenUrl = String.format(tokenUrl, appid, secret, code);
+        String tokenContent = restTemplate.getForObject(tokenUrl,String.class);
+        JSONObject json = JSONObject.parseObject(tokenContent);
+        if (!json.containsKey("access_token")) {
+            return json;
+        }
+        String accessToken=json.getString("access_token");
+        String openId=json.getString("openid");
+        String userInfoUrl = wxProperties.getUserInfoUrl();
+        userInfoUrl = String.format(userInfoUrl, accessToken, openId);
+        String userInfo = restTemplate.getForObject(userInfoUrl,String.class);
+        JSONObject userInfoJson = JSONObject.parseObject(userInfo);
+        userInfoJson.put("access_token", accessToken);
+        return userInfoJson;
     }
 }
