@@ -15,13 +15,14 @@ import org.springframework.util.DigestUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 
+import java.security.MessageDigest;
 import java.util.*;
 
 import static cn.meilituibian.api.common.Constants.USER_TYPE_MERCHAT;
 
 @Service
 public class WxUserService {
-    private static final Logger logger = LogManager.getLogger(WxUserService.class);
+    private static final Logger LOGGER = LogManager.getLogger(WxUserService.class);
     @Autowired
     private WxUserMapper wxUserMapper;
 
@@ -34,7 +35,7 @@ public class WxUserService {
     public WxUser getUserById(Long user_id) {
         WxUser user = wxUserMapper.getWxUserById(user_id);
         if(user == null) {
-            logger.warn("user is not found; user_id={}", user_id);
+            LOGGER.warn("user is not found; user_id={}", user_id);
             throw new ApiException(HttpStatus.NOT_FOUND, "user is not fouod");
         }
         return user;
@@ -86,6 +87,7 @@ public class WxUserService {
         return wxUserMapper.findWxUserByPhone(phone);
     }
 
+
     public JSONObject getWxUserInfo(String appid, String secret, String code) {
         String tokenUrl = wxProperties.getAccessTokenUrl();
         tokenUrl = String.format(tokenUrl, appid, secret, code);
@@ -104,7 +106,7 @@ public class WxUserService {
         return userInfoJson;
     }
 
-    public JSONObject getSignature(String accessToken, String noncestr, String timestamp, String url) {
+    private JSONObject getJsapiTicket(String accessToken) {
         String jsapiUrl = wxProperties.getJsapiUrl();
         jsapiUrl = String.format(jsapiUrl, accessToken);
         String jsapiTicket = restTemplate.getForObject(jsapiUrl, String.class);
@@ -113,12 +115,56 @@ public class WxUserService {
         if (errorcode != 0) {
             return jsapiTicketJson;
         }
+        return null;
+    }
+
+
+    public JSONObject getSignature(String accessToken, String url) {
+        JSONObject jsapiTicketJson = getJsapiTicket(accessToken);
         String ticket = jsapiTicketJson.getString("ticket");
         SortedMap<String,String> parameters = new TreeMap<>();
         parameters.put("jsapi_ticket", ticket);
-        parameters.put("noncestr", noncestr);
-        parameters.put("timestamp", timestamp);
+        parameters.put("noncestr", create_nonce_str());
+        parameters.put("timestamp", create_timestamp());
         parameters.put("url", url);
-        return null;
+
+        JSONObject jsonObject = new JSONObject();
+        StringBuilder query = new StringBuilder();
+        parameters.forEach((k,v)->{
+            query.append("&");
+            query.append(k);
+            query.append("=");
+            query.append(v);
+        });
+        try {
+            MessageDigest crypt = MessageDigest.getInstance("SHA-1");
+            crypt.reset();
+            crypt.update(query.substring(1).toString().getBytes("UTF-8"));
+            String signature = byteToHex(crypt.digest());
+            jsonObject.put("signature", signature);
+        } catch (Exception e) {
+            LOGGER.error("签名失败", e);
+        }
+        return jsonObject;
     }
+
+    private static String byteToHex(final byte[] hash) {
+        Formatter formatter = new Formatter();
+        for (byte b : hash)
+        {
+            formatter.format("%02x", b);
+        }
+        String result = formatter.toString();
+        formatter.close();
+        return result;
+    }
+
+    private static String create_nonce_str() {
+        return UUID.randomUUID().toString();
+    }
+
+    private static String create_timestamp() {
+        return Long.toString(System.currentTimeMillis() / 1000);
+    }
+
 }

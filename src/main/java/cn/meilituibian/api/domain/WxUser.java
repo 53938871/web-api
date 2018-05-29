@@ -34,6 +34,7 @@ public class WxUser implements Serializable{
     private int status; //0：末审核，1：已审核
     private String statusName; //0：末审核，1：已审核
     private String businessLicense; //营业执照
+    private int point; //积分
 
     public String getStatusName() {
         return this.status == 0 ? "末审核" : "已审核";
@@ -225,5 +226,13 @@ public class WxUser implements Serializable{
 
     public void setBusinessLicense(String businessLicense) {
         this.businessLicense = businessLicense;
+    }
+
+    public int getPoint() {
+        return point;
+    }
+
+    public void setPoint(int point) {
+        this.point = point;
     }
 }

@@ -13,12 +13,12 @@
     </resultMap>
 
     <select id="listCategory" resultMap="CategoryResultMap">
-        select id, name, parent_id,grade, icon, hot from category order by grade desc
+        select id, name, parent_id,grade, icon, hot from category where status = 1 order by grade desc
     </select>
 
     <select id="findCategoryById" parameterType="long" resultType="Category">
         select id,name,hot,parent_id as parentId,icon,major_name as majorName,alias_name as aliasName FROM
-        category where id = #{id}
+        category where id = #{id} and status=1
     </select>
 
 

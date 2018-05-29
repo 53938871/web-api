@@ -98,4 +98,10 @@ public class WxUserController {
         return new ResponseEntity<JSONObject>(result, HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/wx/signature", method = RequestMethod.GET)
+    public ResponseEntity<?> getSignature(@RequestParam String accessToken, @RequestParam String url) {
+        JSONObject result = wxUserService.getSignature(accessToken, url);
+        return new ResponseEntity<JSONObject>(result, HttpStatus.OK);
+    }
+
 }
