@@ -123,12 +123,18 @@ public class WxUserService {
         JSONObject jsapiTicketJson = getJsapiTicket(accessToken);
         String ticket = jsapiTicketJson.getString("ticket");
         SortedMap<String,String> parameters = new TreeMap<>();
+        String nonceStr = create_nonce_str();
+        String timestamp = create_timestamp();
         parameters.put("jsapi_ticket", ticket);
-        parameters.put("noncestr", create_nonce_str());
-        parameters.put("timestamp", create_timestamp());
+        parameters.put("noncestr", nonceStr);
+        parameters.put("timestamp", timestamp);
         parameters.put("url", url);
 
         JSONObject jsonObject = new JSONObject();
+        jsonObject.put("noncestr", nonceStr);
+        jsonObject.put("timestamp", timestamp);
+        jsonObject.put("ticket", ticket);
+
         StringBuilder query = new StringBuilder();
         parameters.forEach((k,v)->{
             query.append("&");
