@@ -99,4 +99,11 @@ public class OrderController {
         List<Order> list = orderService.getOrders(paramMap);
         return new ResponseEntity<List<Order>>(list, HttpStatus.OK);
     }
+
+    @RequestMapping(value = {"/check"}, method = RequestMethod.GET)
+    @ApiOperation(value = "下单时根据openId和projectId查看是否有没有处理过的订单")
+    public ResponseEntity<?> getOrderByOpenIdAndProject(@RequestParam String openId, @RequestParam int projectId) {
+        List<Order> list = orderService.getOrderByOpenIdAndProject(openId, projectId);
+        return new ResponseEntity<List<Order>>(list, HttpStatus.OK);
+    }
 }

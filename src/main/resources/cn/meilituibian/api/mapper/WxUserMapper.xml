@@ -5,7 +5,7 @@
 <mapper namespace="cn.meilituibian.api.mapper.WxUserMapper">
     <sql id="select_wx_user">
         select user_id as userId,open_id as openId,user_name as userName, shop_name as shopName,contact,sex as sex,city,province,remark,create_time as createTime,user_type as userType,
-        contract_no as contractNo,parent,number_id as numberId,phone,address, password,taxpayer_code as taxpayerCode,business_license as businessLicense from Wx_User
+        contract_no as contractNo,parent,number_id as numberId,phone,address, password,taxpayer_code as taxpayerCode,business_license as businessLicense,point from Wx_User
     </sql>
 
     <select id="getWxUserById" parameterType="long" resultType="cn.meilituibian.api.domain.WxUser">
@@ -39,6 +39,7 @@
             <if test="numberId != null">numberId=#{numberId},</if>
             <if test="password != null">password=#{password},</if>
             <if test="taxpayerCode != null">taxpayer_code=#{taxpayerCode},</if>
+            <if test="point != null">point=#{point},</if>
         </set>
         where open_id=#{openId}
     </update>
@@ -52,6 +53,10 @@
     </select>
 
     <select id="findWxUserByPhone" resultType="cn.meilituibian.api.domain.WxUser">
-        select user_id as userId from wx_user where user_name=#{userName}
+        select user_id as userId from wx_user where phone=#{phone}
+    </select>
+
+    <select id="getWxUserIdByOpenId" resultType="java.lang.Long">
+        select user_id as userId from wx_user where open_id=#{openId}
     </select>
 </mapper>

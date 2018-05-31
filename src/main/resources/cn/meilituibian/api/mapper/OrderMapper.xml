@@ -4,11 +4,11 @@
 
 <mapper namespace="cn.meilituibian.api.mapper.OrderMapper">
     <sql id="fields">
-        id,open_id as openId,project_id as projectId,project_name as projectName,user_name as userName,phone,subscribe_date as subscribeDate, parent_open_id as parentOpenId,create_date as createDate,status,point
+        id,open_id as openId,project_id as projectId,project_name as projectName,user_name as userName,phone,subscribe_date as subscribeDate, parent_open_id as parentOpenId,create_date as createDate,status,order_no as orderNo
     </sql>
     <insert id="insertOrder" parameterType="cn.meilituibian.api.domain.Order" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
-         insert into `Order`(open_id,project_id,project_name,user_name,phone,email,subscribe_date,parent_open_id,create_date)
-         values(#{openId}, #{projectId}, #{projectName}, #{userName}, #{phone}, #{email}, #{subscribeDate}, #{parentOpenId}, #{createDate})
+         insert into `Order`(open_id,project_id,project_name,user_name,phone,email,subscribe_date,parent_open_id,create_date, order_no)
+         values(#{openId}, #{projectId}, #{projectName}, #{userName}, #{phone}, #{email}, #{subscribeDate}, #{parentOpenId}, #{createDate}, #{orderNo})
     </insert>
 
     <select id="getOrdersByOpenId" resultType="Order">
@@ -38,7 +38,6 @@
         <if test="postCode != null">post_code=#{postCode},</if>
         <if test="updateDate != null">update_date=#{updateDate},</if>
         <if test="subscribeDate != null">subscribe_date=#{subscribeDate},</if>
-        <if test="point>0">point=#{point},</if>
         </set>
         where open_id = #{openId} and id=#{id}
     </update>
@@ -48,7 +47,7 @@
     </select>
 
     <sql id="short_field">
-        id,open_id as openId,user_name as userName,project_id as projectId,project_name as projectName,phone,subscribe_date as subscribeDate,parent_open_id as parentOpenId,status,point
+        id,open_id as openId,user_name as userName,project_id as projectId,project_name as projectName,phone,subscribe_date as subscribeDate,parent_open_id as parentOpenId,status,order_no as orderNo
     </sql>
     <select id="getPerformancesByOpenId" resultType="Order">
         SELECT <include refid="short_field"/>  FROM `order` a WHERE a.parent_open_id=#{openId}
@@ -67,6 +66,10 @@
             </if>
 
         </where>
+    </select>
+
+    <select id="findOrderByOpenIdAndProjectId" resultType="Order">
+         select <include refid="short_field"/>  from `order` where open_id=#{openId} and project_Id=#{projectId} and status=0
     </select>
 
 </mapper>

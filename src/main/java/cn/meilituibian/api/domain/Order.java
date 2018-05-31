@@ -28,6 +28,7 @@ public class Order implements Serializable {
     @JsonIgnore
     private int status; //-1:冻结,0:待处理,1:处理中，2:处理完成
     private String orderStatus;
+    private String orderNo; //订单号
 
     @JsonFormat(pattern="yyyy-MM-dd")
     private Date createDate;
@@ -160,5 +161,13 @@ public class Order implements Serializable {
 
     public void setOrderStatus(String orderStatus) {
         this.orderStatus = orderStatus;
+    }
+
+    public String getOrderNo() {
+        return orderNo;
+    }
+
+    public void setOrderNo(String orderNo) {
+        this.orderNo = orderNo;
     }
 }

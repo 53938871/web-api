@@ -17,4 +17,5 @@ public interface OrderMapper {
     Order getOrderByIdAndOpenId(Map<String, Object> paramMap);
     Order getOrderById(Long id);
     List<Order> getOrders(Map<String, Object> paramMap);
+    List<Order> findOrderByOpenIdAndProjectId(Map<String, Object> map);
 }

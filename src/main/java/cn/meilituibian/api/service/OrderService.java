@@ -1,5 +1,6 @@
 package cn.meilituibian.api.service;
 
+import cn.meilituibian.api.common.ElevocIdGenerator;
 import cn.meilituibian.api.domain.Order;
 import cn.meilituibian.api.mapper.OrderMapper;
 import cn.meilituibian.api.mapper.ProjectMapper;
@@ -20,7 +21,16 @@ public class OrderService {
     @Autowired
     private ProjectMapper projectMapper;
 
+    public List<Order> getOrderByOpenIdAndProject(String openId, int projectId) {
+        Map<String, Object> param = new HashMap<>();
+        param.put("openId", openId);
+        param.put("projectId", projectId);
+        return orderMapper.findOrderByOpenIdAndProjectId(param);
+    }
+
     public Long insertOrder(Order order) {
+        String orderNo = ElevocIdGenerator.uuid32();
+        order.setOrderNo(orderNo);
         order.setCreateDate(new Date());
         Long id = orderMapper.insertOrder(order);
         projectMapper.updateBookNum(order.getProjectId());
@@ -83,4 +93,5 @@ public class OrderService {
         List<Order> list = orderMapper.getOrders(paramMap);
         return list;
     }
+
 }

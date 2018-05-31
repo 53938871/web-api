@@ -49,6 +49,10 @@ public class WxUserService {
         return wxUser;
     }
 
+    public Long getWxUserIdByOpenId(String openId) {
+        return wxUserMapper.getWxUserIdByOpenId(openId);
+    }
+
     @Transactional
     public WxUser insertWxUser(WxUser wxUser) {
         String password = null;
@@ -88,6 +92,14 @@ public class WxUserService {
     }
 
 
+    public JSONObject getAccessToken(String appid, String secret, String code) {
+        String tokenUrl = wxProperties.getAccessTokenUrl();
+        tokenUrl = String.format(tokenUrl, appid, secret, code);
+        String tokenContent = restTemplate.getForObject(tokenUrl,String.class);
+        JSONObject json = JSONObject.parseObject(tokenContent);
+        return json;
+    }
+
     public JSONObject getWxUserInfo(String appid, String secret, String code) {
         String tokenUrl = wxProperties.getAccessTokenUrl();
         tokenUrl = String.format(tokenUrl, appid, secret, code);
@@ -119,20 +131,20 @@ public class WxUserService {
     }
 
 
-    public JSONObject getSignature(String accessToken, String url) {
+    public JSONObject getSignature(String accessToken, String url, String nonceStr, String timestamp) {
         JSONObject jsapiTicketJson = getJsapiTicket(accessToken);
         String ticket = jsapiTicketJson.getString("ticket");
         SortedMap<String,String> parameters = new TreeMap<>();
-        String nonceStr = create_nonce_str();
-        String timestamp = create_timestamp();
+        String tempNonceStr = StringUtils.isEmpty(nonceStr) ? create_nonce_str() : nonceStr;
+        String tempTimestamp = StringUtils.isEmpty(timestamp) ? create_timestamp() : timestamp;
         parameters.put("jsapi_ticket", ticket);
-        parameters.put("noncestr", nonceStr);
-        parameters.put("timestamp", timestamp);
+        parameters.put("noncestr", tempNonceStr);
+        parameters.put("timestamp", tempTimestamp);
         parameters.put("url", url);
 
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("noncestr", nonceStr);
-        jsonObject.put("timestamp", timestamp);
+        jsonObject.put("noncestr", tempNonceStr);
+        jsonObject.put("timestamp", tempTimestamp);
         jsonObject.put("ticket", ticket);
 
         StringBuilder query = new StringBuilder();

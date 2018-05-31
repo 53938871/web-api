@@ -23,4 +23,7 @@ public interface WxUserMapper {
     WxUser login(Map<String, String> map);
 
     WxUser findWxUserByPhone(String phone);
+
+    Long getWxUserIdByOpenId(String openId);
+
 }

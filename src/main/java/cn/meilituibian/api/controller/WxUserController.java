@@ -47,9 +47,9 @@ public class WxUserController {
             ErrorResponseEntity entity = ErrorResponseEntity.fail(wxUser, HttpStatus.BAD_REQUEST.value(), "手机号码不能为空");
             return new ResponseEntity<ErrorResponseEntity>(entity, HttpStatus.BAD_REQUEST);
         }
-        WxUser tempUser = wxUserService.findWxUserByPhone(wxUser.getUserName());
+        WxUser tempUser = wxUserService.findWxUserByPhone(wxUser.getPhone());
         if (tempUser != null) {
-            ErrorResponseEntity entity = ErrorResponseEntity.fail(wxUser, HttpStatus.BAD_REQUEST.value(), "此用户名已存在");
+            ErrorResponseEntity entity = ErrorResponseEntity.fail(wxUser, HttpStatus.BAD_REQUEST.value(), "此手机号码已存在");
             return new ResponseEntity<ErrorResponseEntity>(entity, HttpStatus.BAD_REQUEST);
         }
         WxUser currentUser = wxUserService.insertWxUser(wxUser);
@@ -99,8 +99,19 @@ public class WxUserController {
     }
 
     @RequestMapping(value = "/wx/signature", method = RequestMethod.GET)
-    public ResponseEntity<?> getSignature(@RequestParam String accessToken, @RequestParam String url) {
-        JSONObject result = wxUserService.getSignature(accessToken, url);
+    @ApiOperation(value = "获取微信签名，nonceStr和timestamp可以不传")
+    public ResponseEntity<?> getSignature(@RequestParam String accessToken, @RequestParam String url,
+                                          @RequestParam(value = "nonceStr", required = false) String nonceStr,
+                                          @RequestParam(value = "timestamp", required = false) String timestamp) {
+        JSONObject result = wxUserService.getSignature(accessToken, url, nonceStr, timestamp);
+        return new ResponseEntity<JSONObject>(result, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/wx/accessToken", method = RequestMethod.GET)
+    @ApiOperation(value = "获取信息")
+    public ResponseEntity<?> getAccessToken(@RequestParam("code") String code, @RequestParam String appid,
+                                       @RequestParam("secret") String secret) {
+        JSONObject result = wxUserService.getAccessToken(appid, secret, code);
         return new ResponseEntity<JSONObject>(result, HttpStatus.OK);
     }
 
