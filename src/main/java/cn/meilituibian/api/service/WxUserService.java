@@ -5,8 +5,8 @@ import cn.meilituibian.api.domain.WxUser;
 import cn.meilituibian.api.exception.ApiException;
 import cn.meilituibian.api.mapper.WxUserMapper;
 import com.alibaba.fastjson.JSONObject;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -24,7 +24,7 @@ import static cn.meilituibian.api.common.Constants.USER_TYPE_MERCHAT;
 
 @Service
 public class WxUserService {
-    private static final Logger LOGGER = LogManager.getLogger(WxUserService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(WxUserService.class);
     @Autowired
     private WxUserMapper wxUserMapper;
 
@@ -125,6 +125,7 @@ public class WxUserService {
         jsapiUrl = String.format(jsapiUrl, accessToken);
         String jsapiTicket = restTemplate.getForObject(jsapiUrl, String.class);
         JSONObject jsapiTicketJson = JSONObject.parseObject(jsapiTicket);
+        LOGGER.info("ticket={}", jsapiTicketJson.toJSONString());
         return jsapiTicketJson;
     }
 

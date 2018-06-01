@@ -2,7 +2,6 @@ package cn.meilituibian.api.controller;
 
 import cn.meilituibian.api.domain.WxUser;
 import cn.meilituibian.api.exception.ErrorResponseEntity;
-import cn.meilituibian.api.exception.ExceptionResponse;
 import cn.meilituibian.api.service.WxUserService;
 import com.alibaba.fastjson.JSONObject;
 import io.swagger.annotations.Api;
@@ -13,8 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
+
 import java.util.List;
 
 @RestController

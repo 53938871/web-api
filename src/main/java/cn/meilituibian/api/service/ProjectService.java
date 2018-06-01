@@ -5,9 +5,8 @@ import cn.meilituibian.api.dto.ProjectDto;
 import cn.meilituibian.api.mapper.ProjectMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.beanutils.PropertyUtilsBean;
-import org.apache.ibatis.reflection.ArrayUtil;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -20,7 +19,7 @@ import java.util.Map;
 
 @Service
 public class ProjectService {
-    private static final Logger logger = LogManager.getLogger(ProjectService.class);
+    private static final Logger logger = LoggerFactory.getLogger(ProjectService.class);
     @Autowired
     private ProjectMapper projectMapper;
 

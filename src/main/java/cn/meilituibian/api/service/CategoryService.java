@@ -2,8 +2,8 @@ package cn.meilituibian.api.service;
 
 import cn.meilituibian.api.domain.Category;
 import cn.meilituibian.api.mapper.CategoryMapper;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
@@ -13,7 +13,7 @@ import java.util.*;
 
 @Service
 public class CategoryService {
-    private static final Logger logger = LogManager.getLogger(CategoryService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CategoryService.class);
     @Autowired
     private CategoryMapper categoryMapper;
 
