@@ -49,7 +49,7 @@ public class WxUserService {
         return wxUser;
     }
 
-    public Long getWxUserIdByOpenId(String openId) {
+    public WxUser getWxUserIdByOpenId(String openId) {
         return wxUserMapper.getWxUserIdByOpenId(openId);
     }
 
@@ -123,13 +123,8 @@ public class WxUserService {
         jsapiUrl = String.format(jsapiUrl, accessToken);
         String jsapiTicket = restTemplate.getForObject(jsapiUrl, String.class);
         JSONObject jsapiTicketJson = JSONObject.parseObject(jsapiTicket);
-        int errorcode = jsapiTicketJson.getIntValue("errcode");
-        if (errorcode != 0) {
-            return jsapiTicketJson;
-        }
-        return null;
+        return jsapiTicketJson;
     }
-
 
     public JSONObject getSignature(String accessToken, String url, String nonceStr, String timestamp) {
         JSONObject jsapiTicketJson = getJsapiTicket(accessToken);
@@ -146,6 +141,7 @@ public class WxUserService {
         jsonObject.put("noncestr", tempNonceStr);
         jsonObject.put("timestamp", tempTimestamp);
         jsonObject.put("ticket", ticket);
+        jsonObject.put("access_token", accessToken);
 
         StringBuilder query = new StringBuilder();
         parameters.forEach((k,v)->{
@@ -154,6 +150,7 @@ public class WxUserService {
             query.append("=");
             query.append(v);
         });
+
         try {
             MessageDigest crypt = MessageDigest.getInstance("SHA-1");
             crypt.reset();

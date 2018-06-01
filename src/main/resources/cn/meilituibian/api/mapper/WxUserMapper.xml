@@ -56,7 +56,7 @@
         select user_id as userId from wx_user where phone=#{phone}
     </select>
 
-    <select id="getWxUserIdByOpenId" resultType="java.lang.Long">
-        select user_id as userId from wx_user where open_id=#{openId}
+    <select id="getWxUserIdByOpenId" resultType="cn.meilituibian.api.domain.WxUser">
+        <include refid="select_wx_user"/> where open_id=#{openId}
     </select>
 </mapper>

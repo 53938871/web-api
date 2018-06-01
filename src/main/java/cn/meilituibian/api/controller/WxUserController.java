@@ -39,6 +39,10 @@ public class WxUserController {
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     @ApiOperation(value = "保存用户信息 userType(0:普通用户,1:商家)",response = Long.class)
     public ResponseEntity<?> insertWxUser(@RequestBody WxUser wxUser) {
+        WxUser existUser = wxUserService.getWxUserIdByOpenId(wxUser.getOpenId());
+        if (existUser != null) {
+            return new ResponseEntity<WxUser>(existUser, HttpStatus.OK);
+        }
         if (StringUtils.isEmpty(wxUser.getUserName())) {
             ErrorResponseEntity entity = ErrorResponseEntity.fail(wxUser, HttpStatus.BAD_REQUEST.value(), "用户名不能为空");
             return new ResponseEntity<ErrorResponseEntity>(entity, HttpStatus.BAD_REQUEST);
