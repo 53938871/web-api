@@ -10,7 +10,7 @@
             <PatternLayout pattern="${LOG_PATTERN}"/>
         </Console>
         <!-- Rolling File Appender -->
-        <RollingFile name="FileAppender" fileName="d://logs/api.log"
+        <RollingFile name="FileAppender" fileName="e://logs/api.log"
                      filePattern="logs/api-%d{yyyy-MM-dd}-%i.log">
             <PatternLayout>
                 <Pattern>${LOG_PATTERN}</Pattern>

@@ -15,6 +15,8 @@ import org.springframework.util.DigestUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.security.MessageDigest;
 import java.util.*;
 
@@ -127,36 +129,39 @@ public class WxUserService {
     }
 
     public JSONObject getSignature(String accessToken, String url, String nonceStr, String timestamp) {
-        JSONObject jsapiTicketJson = getJsapiTicket(accessToken);
-        String ticket = jsapiTicketJson.getString("ticket");
-        SortedMap<String,String> parameters = new TreeMap<>();
-        String tempNonceStr = StringUtils.isEmpty(nonceStr) ? create_nonce_str() : nonceStr;
-        String tempTimestamp = StringUtils.isEmpty(timestamp) ? create_timestamp() : timestamp;
-        parameters.put("jsapi_ticket", ticket);
-        parameters.put("noncestr", tempNonceStr);
-        parameters.put("timestamp", tempTimestamp);
-        parameters.put("url", url);
-
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("noncestr", tempNonceStr);
-        jsonObject.put("timestamp", tempTimestamp);
-        jsonObject.put("ticket", ticket);
-        jsonObject.put("access_token", accessToken);
-
-        StringBuilder query = new StringBuilder();
-        parameters.forEach((k,v)->{
-            query.append("&");
-            query.append(k);
-            query.append("=");
-            query.append(v);
-        });
-
         try {
+            JSONObject jsapiTicketJson = getJsapiTicket(accessToken);
+            String ticket = jsapiTicketJson.getString("ticket");
+            SortedMap<String,String> parameters = new TreeMap<>();
+            String tempNonceStr = StringUtils.isEmpty(nonceStr) ? create_nonce_str() : nonceStr;
+            String tempTimestamp = StringUtils.isEmpty(timestamp) ? create_timestamp() : timestamp;
+            parameters.put("jsapi_ticket", ticket);
+            parameters.put("noncestr", tempNonceStr);
+            parameters.put("timestamp", tempTimestamp);
+            parameters.put("url", URLDecoder.decode(url, "utf-8"));
+
+
+            jsonObject.put("noncestr", tempNonceStr);
+            jsonObject.put("timestamp", tempTimestamp);
+            jsonObject.put("ticket", ticket);
+            jsonObject.put("access_token", accessToken);
+
+            StringBuilder query = new StringBuilder();
+            parameters.forEach((k,v)->{
+                query.append("&");
+                query.append(k);
+                query.append("=");
+                query.append(v);
+            });
+
+
             MessageDigest crypt = MessageDigest.getInstance("SHA-1");
             crypt.reset();
             crypt.update(query.substring(1).toString().getBytes("UTF-8"));
             String signature = byteToHex(crypt.digest());
             jsonObject.put("signature", signature);
+            LOGGER.info("参数为={},签名参数={},签名为={}",jsonObject.toJSONString(), query.substring(1).toString(), signature);
         } catch (Exception e) {
             LOGGER.error("签名失败", e);
         }
