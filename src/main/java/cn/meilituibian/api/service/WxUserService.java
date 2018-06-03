@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.context.request.RequestContextHolder;
 
 import java.net.URLDecoder;
 import java.net.URLEncoder;
@@ -38,15 +39,16 @@ public class WxUserService {
         WxUser user = wxUserMapper.getWxUserById(user_id);
         if(user == null) {
             LOGGER.warn("user is not found; user_id={}", user_id);
-            throw new ApiException(HttpStatus.NOT_FOUND, "user is not fouod");
         }
         return user;
     }
 
     public WxUser getUserByOpenId(String openId) {
         WxUser wxUser = wxUserMapper.getWxUserByOpenId(openId);
-        if(wxUser == null) {
-            throw new ApiException(HttpStatus.NOT_FOUND, "user is not fouod");
+        if (wxUser == null) {
+            wxUser = new WxUser();
+            wxUser.setOpenId(openId);
+            wxUserMapper.insertWxUser(wxUser);
         }
         return wxUser;
     }
@@ -102,6 +104,13 @@ public class WxUserService {
         return json;
     }
 
+    public JSONObject getAccessToken() {
+        String url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wx8f561aa33d77f65a&secret=2cf868bb6675f052ce94b68f9848f5a1";
+        String tokenContent = restTemplate.getForObject(url,String.class);
+        JSONObject json = JSONObject.parseObject(tokenContent);
+        return json;
+    }
+
     public JSONObject getWxUserInfo(String appid, String secret, String code) {
         String tokenUrl = wxProperties.getAccessTokenUrl();
         tokenUrl = String.format(tokenUrl, appid, secret, code);
@@ -132,7 +141,10 @@ public class WxUserService {
     public JSONObject getSignature(String accessToken, String url, String nonceStr, String timestamp) {
         JSONObject jsonObject = new JSONObject();
         try {
+            JSONObject tokenJson = getAccessToken();
+            accessToken = tokenJson.getString("access_token");
             JSONObject jsapiTicketJson = getJsapiTicket(accessToken);
+
             String ticket = jsapiTicketJson.getString("ticket");
             SortedMap<String,String> parameters = new TreeMap<>();
             String tempNonceStr = StringUtils.isEmpty(nonceStr) ? create_nonce_str() : nonceStr;
@@ -140,7 +152,8 @@ public class WxUserService {
             parameters.put("jsapi_ticket", ticket);
             parameters.put("noncestr", tempNonceStr);
             parameters.put("timestamp", tempTimestamp);
-            parameters.put("url", URLDecoder.decode(url, "utf-8"));
+            //parameters.put("url", URLDecoder.decode(url, "utf-8"));
+            parameters.put("url", url);
 
 
             jsonObject.put("noncestr", tempNonceStr);

@@ -24,14 +24,16 @@ public class WxUserController {
 
     @RequestMapping(value = "/id/{id}", method = RequestMethod.GET)
     @ApiOperation(value = "根据id查找用户",response = WxUser.class)
-    public WxUser getUserById(@PathVariable("id") Long user_id) {
-        return wxUserService.getUserById(user_id);
+    public ResponseEntity<?> getUserById(@PathVariable("id") Long user_id) {
+        WxUser wxUser = wxUserService.getUserById(user_id);
+        return new ResponseEntity<WxUser>(wxUser, HttpStatus.OK);
     }
 
     @RequestMapping(value = "", method = RequestMethod.GET)
     @ApiOperation(value = "根据openid查找用户",response = WxUser.class)
-    public WxUser getUserByOpenId(@RequestParam(value = "open_id", required = true) String openId) {
-        return wxUserService.getUserByOpenId(openId);
+    public ResponseEntity<?> getUserByOpenId(@RequestParam(value = "open_id", required = true) String openId) {
+        WxUser wxUser = wxUserService.getUserByOpenId(openId);
+        return new ResponseEntity<WxUser>(wxUser, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)

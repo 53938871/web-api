@@ -30,8 +30,8 @@ public class OrderController {
     public ResponseEntity<?> insertOrder(@Valid @RequestBody Order order, BindingResult bindingResult) {
         if(bindingResult.hasErrors()) {
             String errorMsg = bindingResult.getFieldError().getDefaultMessage();
-            ErrorResponse errorResponse = new ErrorResponse(400, errorMsg);
-            return new ResponseEntity<ErrorResponse>(errorResponse, HttpStatus.BAD_REQUEST);
+            ErrorResponse errorResponse = new ErrorResponse(200, errorMsg);
+            return new ResponseEntity<ErrorResponse>(errorResponse, HttpStatus.OK);
         }else {
             Long id = orderService.insertOrder(order);
             Map<String, Object> result = new HashMap<>();
