@@ -107,8 +107,8 @@ public class ProjectController {
     public ResponseEntity<?> getProjectById(@PathVariable("id") Long id) {
         Project project = projectService.getProjectById(id);
         if (project == null) {
-            ErrorResponse response = new ErrorResponse(404, "找不到相关的项目");
-            return new ResponseEntity<ErrorResponse>(response, HttpStatus.NOT_FOUND);
+            ErrorResponse response = new ErrorResponse(200, "找不到相关的项目");
+            return new ResponseEntity<ErrorResponse>(response, HttpStatus.OK);
         }
         return new ResponseEntity<Project>(project, HttpStatus.OK);
     }
