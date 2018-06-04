@@ -8,6 +8,8 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +19,8 @@ import org.springframework.web.bind.annotation.*;
 @Api(value="文章信息", description="文章信息")
 @RequestMapping(value = "/articles")
 public class ArticleController {
+    private static final Logger LOGGER = LogManager.getLogger(ArticleController.class);
+
     @Autowired
     private ArticleService articleService;
 

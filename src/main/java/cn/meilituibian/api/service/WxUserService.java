@@ -2,23 +2,17 @@ package cn.meilituibian.api.service;
 
 import cn.meilituibian.api.WxProperties;
 import cn.meilituibian.api.domain.WxUser;
-import cn.meilituibian.api.exception.ApiException;
 import cn.meilituibian.api.mapper.WxUserMapper;
 import com.alibaba.fastjson.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.http.HttpStatus;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.context.request.RequestContextHolder;
 
-import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.security.MessageDigest;
 import java.util.*;
 
@@ -26,7 +20,7 @@ import static cn.meilituibian.api.common.Constants.USER_TYPE_MERCHAT;
 
 @Service
 public class WxUserService {
-    private static final Logger LOGGER = LoggerFactory.getLogger(WxUserService.class);
+    private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(WxUserService.class);
     @Autowired
     private WxUserMapper wxUserMapper;
 
@@ -39,6 +33,7 @@ public class WxUserService {
     public WxUser getUserById(Long user_id) {
         WxUser user = wxUserMapper.getWxUserById(user_id);
         if(user == null) {
+            user = new WxUser();
             LOGGER.warn("user is not found; user_id={}", user_id);
         }
         return user;

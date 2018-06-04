@@ -5,21 +5,18 @@ import cn.meilituibian.api.dto.ProjectDto;
 import cn.meilituibian.api.mapper.ProjectMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.beanutils.PropertyUtilsBean;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class ProjectService {
-    private static final Logger logger = LoggerFactory.getLogger(ProjectService.class);
+    private static final Logger logger = LogManager.getLogger(ProjectService.class);
+
     @Autowired
     private ProjectMapper projectMapper;
 
@@ -45,7 +42,7 @@ public class ProjectService {
                 }
             }
         } catch (Exception e) {
-            logger.error("Project 转化 ProjectDto 出错");
+            logger.error("Project 转化 ProjectDto 出错;categoryId={}", categoryId);
         }
         return projectDto;
     }
