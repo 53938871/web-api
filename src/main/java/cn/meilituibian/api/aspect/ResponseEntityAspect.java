@@ -40,7 +40,7 @@ public class ResponseEntityAspect {
             }
 
             responseMeta.setData(responseBody);
-            ErrorCode errorCode = ErrorCode.getErrorCode(httpStatus.value());
+            ErrorCode errorCode = ErrorCode.getErrorCode(httpStatus.value() == 200 ? 0 : httpStatus.value());
             responseMeta.setCode(errorCode.getCode());
             responseMeta.setMessage(errorCode.getMessage());
             return new ResponseEntity<>(responseMeta, responseHeaders, HttpStatus.OK);
