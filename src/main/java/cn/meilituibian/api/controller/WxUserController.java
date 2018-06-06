@@ -1,5 +1,6 @@
 package cn.meilituibian.api.controller;
 
+import cn.meilituibian.api.common.ErrorCode;
 import cn.meilituibian.api.domain.WxUser;
 import cn.meilituibian.api.exception.ErrorResponseEntity;
 import cn.meilituibian.api.service.WxUserService;
@@ -44,17 +45,17 @@ public class WxUserController {
             return new ResponseEntity<WxUser>(existUser, HttpStatus.OK);
         }
         if (StringUtils.isEmpty(wxUser.getUserName())) {
-            ErrorResponseEntity entity = ErrorResponseEntity.fail(wxUser, HttpStatus.OK.value(), "用户名不能为空");
-            return new ResponseEntity<ErrorResponseEntity>(entity, HttpStatus.OK);
+            ErrorResponseEntity entity = ErrorResponseEntity.fail(wxUser, ErrorCode.USER_NAME_IS_EMPTY.getCode(), "用户名不能为空");
+            return new ResponseEntity<ErrorResponseEntity>(entity, HttpStatus.BAD_REQUEST);
         }
         if (StringUtils.isEmpty(wxUser.getPhone())) {
-            ErrorResponseEntity entity = ErrorResponseEntity.fail(wxUser, HttpStatus.OK.value(), "手机号码不能为空");
-            return new ResponseEntity<ErrorResponseEntity>(entity, HttpStatus.OK);
+            ErrorResponseEntity entity = ErrorResponseEntity.fail(wxUser, ErrorCode.PHONE_IS_EMPTY.getCode(), "手机号码不能为空");
+            return new ResponseEntity<ErrorResponseEntity>(entity, HttpStatus.BAD_REQUEST);
         }
         WxUser tempUser = wxUserService.findWxUserByPhone(wxUser.getPhone());
         if (tempUser != null) {
-            ErrorResponseEntity entity = ErrorResponseEntity.fail(wxUser, HttpStatus.OK.value(), "此手机号码已存在");
-            return new ResponseEntity<ErrorResponseEntity>(entity, HttpStatus.OK);
+            ErrorResponseEntity entity = ErrorResponseEntity.fail(wxUser, ErrorCode.PHONE_IS_EXISTS.getCode(), "此手机号码已存在");
+            return new ResponseEntity<ErrorResponseEntity>(entity, HttpStatus.BAD_REQUEST);
         }
         WxUser currentUser = wxUserService.insertWxUser(wxUser);
         return new ResponseEntity<WxUser>(currentUser, HttpStatus.OK);
@@ -116,6 +117,10 @@ public class WxUserController {
     public ResponseEntity<?> getAccessToken(@RequestParam("code") String code, @RequestParam String appid,
                                        @RequestParam("secret") String secret) {
         JSONObject result = wxUserService.getAccessToken(appid, secret, code);
+        if (result.containsKey("errcode") && !result.containsKey("access_token")) {
+            ErrorResponseEntity entity = ErrorResponseEntity.fail(result, HttpStatus.BAD_REQUEST.value(), "获取AccessToken失败");
+            return new ResponseEntity<ErrorResponseEntity>(entity, HttpStatus.OK);
+        }
         return new ResponseEntity<JSONObject>(result, HttpStatus.OK);
     }
 

@@ -18,7 +18,7 @@ public class InformationService {
 
     public List<Map<String, Object>> getInformationTitles() {
         List<Information> list = informationMapper.getInformations();
-        if(!list.isEmpty()) {
+        if(list.isEmpty()) {
             return Collections.EMPTY_LIST;
         }
         List<Map<String, Object>> result = new ArrayList<>();

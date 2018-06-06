@@ -1,7 +1,7 @@
 package cn.meilituibian.api.controller;
 
-import cn.meilituibian.api.common.ErrorResponse;
 import cn.meilituibian.api.domain.Order;
+import cn.meilituibian.api.exception.ErrorResponseEntity;
 import cn.meilituibian.api.service.OrderService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -30,13 +30,11 @@ public class OrderController {
     public ResponseEntity<?> insertOrder(@Valid @RequestBody Order order, BindingResult bindingResult) {
         if(bindingResult.hasErrors()) {
             String errorMsg = bindingResult.getFieldError().getDefaultMessage();
-            ErrorResponse errorResponse = new ErrorResponse(200, errorMsg);
-            return new ResponseEntity<ErrorResponse>(errorResponse, HttpStatus.OK);
+            ErrorResponseEntity errorResponse = ErrorResponseEntity.fail(order,400, errorMsg);
+            return new ResponseEntity<ErrorResponseEntity>(errorResponse, HttpStatus.OK);
         }else {
             Long id = orderService.insertOrder(order);
-            Map<String, Object> result = new HashMap<>();
-            result.put("id", id);
-            return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
+            return new ResponseEntity<Order>(order, HttpStatus.OK);
         }
     }
 
@@ -55,8 +53,8 @@ public class OrderController {
             return new ResponseEntity<Order>(order, HttpStatus.OK);
         }
         Map<String, String> result = new HashMap<>();
-        result.put("message", "更新失败");
-        return new ResponseEntity<Map<String, String>>(result, HttpStatus.INTERNAL_SERVER_ERROR);
+        ErrorResponseEntity errorResponse = ErrorResponseEntity.fail(order,500, "更新失败");
+        return new ResponseEntity<ErrorResponseEntity>(errorResponse, HttpStatus.OK);
     }
 
     @RequestMapping(value = {"/detail/{id}"}, method = RequestMethod.GET)
@@ -69,8 +67,8 @@ public class OrderController {
             order = orderService.getOrderByIdAndOpenId(id, openId);
         }
         if (order == null) {
-            ErrorResponse response = new ErrorResponse(404, "找不到此订单");
-            return new ResponseEntity<ErrorResponse>(response, HttpStatus.NOT_FOUND);
+            ErrorResponseEntity response = ErrorResponseEntity.fail(order, 404, "找不到此订单");
+            return new ResponseEntity<ErrorResponseEntity>(response, HttpStatus.OK);
         }
         return new ResponseEntity<Order>(order, HttpStatus.OK);
     }

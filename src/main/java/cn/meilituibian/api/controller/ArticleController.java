@@ -1,6 +1,7 @@
 package cn.meilituibian.api.controller;
 
 import cn.meilituibian.api.common.Constants;
+import cn.meilituibian.api.common.ResponseMeta;
 import cn.meilituibian.api.domain.Article;
 import cn.meilituibian.api.domain.Comment;
 import cn.meilituibian.api.service.ArticleService;
@@ -33,7 +34,7 @@ public class ArticleController {
 
     @RequestMapping(value = "", method = RequestMethod.GET)
     @ApiOperation(value = "分页查询文章")
-    public ResponseEntity<?> selectArticles(@RequestParam int pageNo){
+    public ResponseEntity<?> selectArticles(@RequestParam(value = "pageNo", required = false, defaultValue = "1") int pageNo){
         Page<Article> articles = articleService.selectArticles(pageNo, Constants.PAGE_SIZE);
         PageInfo<Article> result = new PageInfo<>(articles);
         return new ResponseEntity<PageInfo<Article>>(result, HttpStatus.OK);

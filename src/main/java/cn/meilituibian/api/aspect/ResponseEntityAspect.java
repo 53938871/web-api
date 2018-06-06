@@ -1,56 +1,53 @@
 package cn.meilituibian.api.aspect;
 
+import cn.meilituibian.api.common.ErrorCode;
+import cn.meilituibian.api.common.ResponseMeta;
+import cn.meilituibian.api.exception.ErrorResponseEntity;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
-import org.aspectj.lang.reflect.MethodSignature;
+
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.aspectj.lang.annotation.Around;
-import org.aspectj.lang.annotation.Aspect;
-import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.Map;
+
 
 @Aspect
 @Configuration
 public class ResponseEntityAspect {
+    private static final Logger LOGGER = LogManager.getLogger(ResponseEntityAspect.class);
 
     @Around("@within(org.springframework.web.bind.annotation.RestController) && @annotation(org.springframework.web.bind.annotation.RequestMapping)")
     public Object aroundMethod(ProceedingJoinPoint joinPoint) throws Throwable {
         try {
-            long start = System.currentTimeMillis();
             ResponseEntity<?> responseEntity = (ResponseEntity<?>) joinPoint.proceed();
-            long end = System.currentTimeMillis();
             HttpStatus httpStatus = responseEntity.getStatusCode();
-
-
-
             Object responseBody = responseEntity.getBody();
-
-            Object response = null;
-
-            if (joinPoint.getSignature() instanceof MethodSignature) {
-                MethodSignature signature = (MethodSignature) joinPoint.getSignature();
-                Method method = signature.getMethod();
-
-                Map map = new HashMap<>();
-                map.put("data", responseBody);
-                response = map;
-
+            ResponseMeta responseMeta = new ResponseMeta();
+            HttpHeaders responseHeaders = responseEntity.getHeaders();
+            if (responseBody instanceof  ErrorResponseEntity) {
+                ErrorResponseEntity errorResponseEntity = (ErrorResponseEntity)responseBody;
+                responseMeta.setMessage(errorResponseEntity.getErrorMsg());
+                responseMeta.setCode(errorResponseEntity.getErrorCode());
+                responseMeta.setData(errorResponseEntity.getData());
+                return new ResponseEntity<>(responseMeta, responseHeaders, HttpStatus.OK);
             }
 
-
-
-            HttpHeaders responseHeaders = responseEntity.getHeaders();
-
-            return new ResponseEntity<>(response, responseHeaders, httpStatus);
+            responseMeta.setData(responseBody);
+            ErrorCode errorCode = ErrorCode.getErrorCode(httpStatus.value());
+            responseMeta.setCode(errorCode.getCode());
+            responseMeta.setMessage(errorCode.getMessage());
+            return new ResponseEntity<>(responseMeta, responseHeaders, HttpStatus.OK);
 
         } catch (Exception e) {
-            return null;
+            LOGGER.error("Response entity aspect 错误.", e);
+            throw e;
         }
 
     }

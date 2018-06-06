@@ -1,20 +1,17 @@
 package cn.meilituibian.api.controller;
 
-import cn.meilituibian.api.common.ErrorResponse;
 import cn.meilituibian.api.domain.Comment;
 import cn.meilituibian.api.domain.Project;
-import cn.meilituibian.api.dto.ProjectDto;
+import cn.meilituibian.api.exception.ErrorResponseEntity;
 import cn.meilituibian.api.service.CommentService;
 import cn.meilituibian.api.service.ProjectService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -107,8 +104,8 @@ public class ProjectController {
     public ResponseEntity<?> getProjectById(@PathVariable("id") Long id) {
         Project project = projectService.getProjectById(id);
         if (project == null) {
-            ErrorResponse response = new ErrorResponse(200, "找不到相关的项目");
-            return new ResponseEntity<ErrorResponse>(response, HttpStatus.OK);
+            ErrorResponseEntity errorResponseEntity = ErrorResponseEntity.fail(id, 404, "找不到相关的项目");
+            return new ResponseEntity<ErrorResponseEntity>(errorResponseEntity, HttpStatus.OK);
         }
         return new ResponseEntity<Project>(project, HttpStatus.OK);
     }
