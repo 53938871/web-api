@@ -4,7 +4,7 @@ import org.springframework.http.HttpStatus;
 
 public enum ErrorCode{
     //10用户信息
-    SUCCESS(200, "success"),
+    SUCCESS(0, "success"),
     RESOURCE_NOT_FOUND(404, "没有此信息"),
     BAD_REQUEST(400, "错误的请求"),
     USER_NOT_FOUND(10404, "没有此用户"),
