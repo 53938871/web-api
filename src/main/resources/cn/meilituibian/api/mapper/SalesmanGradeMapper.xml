@@ -1,0 +1,10 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.meilituibian.api.mapper.SalesManGradeMapper">
+    <select id="listGrade" resultType="cn.meilituibian.api.domain.SalesmanGrade">
+        SELECT id, title_code AS titleCode, title_name AS titleName, months ,amount_money AS amountMoney FROM salesman_grade
+    </select>
+
+</mapper>

@@ -5,7 +5,7 @@
 <mapper namespace="cn.meilituibian.api.mapper.WxUserMapper">
     <sql id="select_wx_user">
         select user_id as userId,open_id as openId,user_name as userName, shop_name as shopName,contact,sex as sex,city,province,remark,create_time as createTime,user_type as userType,
-        contract_no as contractNo,parent,number_id as numberId,phone,address, password,taxpayer_code as taxpayerCode,business_license as businessLicense,point from Wx_User
+        contract_no as contractNo,parent,number_id as numberId,phone,address, password,taxpayer_code as taxpayerCode,business_license as businessLicense,point,job_title as jobTitle,update_time as updateTime from Wx_User
     </sql>
 
     <select id="getWxUserById" parameterType="long" resultType="cn.meilituibian.api.domain.WxUser">
@@ -17,8 +17,8 @@
     </select>
 
     <insert id="insertWxUser" keyColumn="user_id" keyProperty="userId" useGeneratedKeys="true" parameterType="cn.meilituibian.api.domain.WxUser">
-        insert into wx_user(open_id,user_name,shop_name,contact,sex,city,province,remark,create_time,user_type,contract_no,parent,number_id,phone,address,password,taxpayer_code,business_license)
-        values(#{openId},#{userName},#{shopName},#{contact},#{sex},#{city},#{province},#{remark},#{createTime},#{userType},#{contractNo},#{parent},#{numberId},#{phone},#{address},#{password},#{taxpayerCode},#{businessLicense})
+        insert into wx_user(open_id,user_name,shop_name,contact,sex,city,province,remark,create_time,user_type,contract_no,parent,number_id,phone,address,password,taxpayer_code,business_license,job_title, update_time)
+        values(#{openId},#{userName},#{shopName},#{contact},#{sex},#{city},#{province},#{remark},#{createTime},#{userType},#{contractNo},#{parent},#{numberId},#{phone},#{address},#{password},#{taxpayerCode},#{businessLicense},#{jobTitle},#{updateTime})
     </insert>
 
     <update id="updateWxUser" >
@@ -40,6 +40,8 @@
             <if test="password != null">password=#{password},</if>
             <if test="taxpayerCode != null">taxpayer_code=#{taxpayerCode},</if>
             <if test="point != null">point=#{point},</if>
+            <if test="jobTitle != null">job_title=#{jobTitle},</if>
+            <if test="updateTime != null">update_time=#{updateTime},</if>
         </set>
         where open_id=#{openId}
     </update>

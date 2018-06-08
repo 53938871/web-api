@@ -15,4 +15,16 @@
            transactionalMode="off">
     </cache>
 
+    <!-- 自定义缓存区域 -->
+    <cache name="commonCache"
+           maxElementsInMemory="10000"
+           eternal="false"
+           timeToIdleSeconds="0"
+           timeToLiveSeconds="60"
+           maxElementsOnDisk="10000"
+           diskExpiryThreadIntervalSeconds="120"
+           memoryStoreEvictionPolicy="LRU">
+        <persistence strategy="localTempSwap"/>
+    </cache>
+
 </ehcache>

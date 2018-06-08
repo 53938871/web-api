@@ -1,5 +1,7 @@
 package cn.meilituibian.api.domain;
 
+import cn.meilituibian.api.common.JobTitleEnum;
+import cn.meilituibian.api.common.UserTypeEnum;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -26,6 +28,7 @@ public class WxUser implements Serializable{
     @JsonFormat(pattern="yyyy-MM-dd")
     private Date createTime;
     private int userType;
+    private String userTypeName;
     private String contractNo;
     private String parent; //直接领导
     private String phone;
@@ -35,6 +38,11 @@ public class WxUser implements Serializable{
     private String statusName; //0：末审核，1：已审核
     private String businessLicense; //营业执照
     private int point; //积分
+    @JsonIgnore
+    private int jobTitle; //职位代码
+    private String jotTitleName;
+    @JsonIgnore
+    private Date updateTime;
 
     public String getStatusName() {
         return this.status == 0 ? "末审核" : "已审核";
@@ -235,4 +243,33 @@ public class WxUser implements Serializable{
     public void setPoint(int point) {
         this.point = point;
     }
+
+    public int getJobTitle() {
+        return jobTitle;
+    }
+
+    public void setJobTitle(int jobTitle) {
+        this.jobTitle = jobTitle;
+    }
+
+    public String getJotTitleName() {
+        return JobTitleEnum.getTitle(this.jobTitle);
+    }
+
+    public void setJotTitleName(String jotTitleName) {
+        this.jotTitleName = jotTitleName;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    public String getUserTypeName() {
+        return UserTypeEnum.getTypeName(this.userType);
+    }
+
 }

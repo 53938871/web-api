@@ -56,6 +56,9 @@ public class WxUserService {
     @Transactional
     public WxUser insertWxUser(WxUser wxUser) {
         String password = null;
+        Date today = new Date();
+        wxUser.setCreateTime(today);
+        wxUser.setUpdateTime(today);
         if (wxUser.getUserType() == USER_TYPE_MERCHAT) { //商家
             password = wxUser.getPhone().substring(wxUser.getPhone().length() - 6);
             wxUser.setPassword(DigestUtils.md5DigestAsHex(password.getBytes()));
@@ -148,9 +151,7 @@ public class WxUserService {
             parameters.put("jsapi_ticket", ticket);
             parameters.put("noncestr", tempNonceStr);
             parameters.put("timestamp", tempTimestamp);
-            //parameters.put("url", URLDecoder.decode(url, "utf-8"));
             parameters.put("url", url);
-
 
             jsonObject.put("noncestr", tempNonceStr);
             jsonObject.put("timestamp", tempTimestamp);
@@ -164,7 +165,6 @@ public class WxUserService {
                 query.append("=");
                 query.append(v);
             });
-
 
             MessageDigest crypt = MessageDigest.getInstance("SHA-1");
             crypt.reset();
