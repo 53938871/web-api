@@ -1,12 +1,15 @@
 package cn.meilituibian.api.service;
 
 import cn.meilituibian.api.WxProperties;
+import cn.meilituibian.api.common.JobTitleEnum;
+import cn.meilituibian.api.domain.SalesmanGrade;
 import cn.meilituibian.api.domain.WxUser;
 import cn.meilituibian.api.mapper.WxUserMapper;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
@@ -30,6 +33,9 @@ public class WxUserService {
     @Autowired
     private RestTemplate restTemplate;
 
+    @Autowired
+    private SalesManGradeService salesManGradeService;
+
     public WxUser getUserById(Long user_id) {
         WxUser user = wxUserMapper.getWxUserById(user_id);
         if(user == null) {
@@ -39,13 +45,18 @@ public class WxUserService {
         return user;
     }
 
-    public WxUser getUserByOpenId(String openId) {
+    public WxUser getUserByOpenId(String openId, String parent) {
         WxUser wxUser = wxUserMapper.getWxUserByOpenId(openId);
         if (wxUser == null) {
             wxUser = new WxUser();
             wxUser.setOpenId(openId);
+            wxUser.setParent(parent);
+            wxUser.setJobTitle(StringUtils.isEmpty(parent) ? JobTitleEnum.INDIVIDUAL.getTitleCode() : JobTitleEnum.MEMBER.getTitleCode());
             wxUserMapper.insertWxUser(wxUser);
+        } else {
+            List<SalesmanGrade> list = salesManGradeService.getGradeList();
         }
+
         return wxUser;
     }
 
@@ -94,7 +105,7 @@ public class WxUserService {
         return wxUserMapper.findWxUserByPhone(phone);
     }
 
-
+    @Deprecated
     public JSONObject getAccessToken(String appid, String secret, String code) {
         String tokenUrl = wxProperties.getAccessTokenUrl();
         tokenUrl = String.format(tokenUrl, appid, secret, code);
@@ -103,10 +114,16 @@ public class WxUserService {
         return json;
     }
 
+
+    @Cacheable(value = "commonCache" ,unless = "#result==null")
     public JSONObject getAccessToken() {
-        String url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wx8f561aa33d77f65a&secret=2cf868bb6675f052ce94b68f9848f5a1";
+        String url = wxProperties.getTokenUrl();
+        //String url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wx8f561aa33d77f65a&secret=2cf868bb6675f052ce94b68f9848f5a1";
         String tokenContent = restTemplate.getForObject(url,String.class);
         JSONObject json = JSONObject.parseObject(tokenContent);
+        if (!json.containsKey("access_token")) {
+            return null;
+        }
         return json;
     }
 
@@ -140,8 +157,6 @@ public class WxUserService {
     public JSONObject getSignature(String accessToken, String url, String nonceStr, String timestamp) {
         JSONObject jsonObject = new JSONObject();
         try {
-            JSONObject tokenJson = getAccessToken();
-            accessToken = tokenJson.getString("access_token");
             JSONObject jsapiTicketJson = getJsapiTicket(accessToken);
 
             String ticket = jsapiTicketJson.getString("ticket");

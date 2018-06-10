@@ -20,7 +20,7 @@
            maxElementsInMemory="10000"
            eternal="false"
            timeToIdleSeconds="0"
-           timeToLiveSeconds="60"
+           timeToLiveSeconds="7000"
            maxElementsOnDisk="10000"
            diskExpiryThreadIntervalSeconds="120"
            memoryStoreEvictionPolicy="LRU">

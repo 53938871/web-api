@@ -51,13 +51,5 @@ public class ResponseEntityAspect {
         }
 
     }
-
-    @Pointcut("execution(public * cn.meilituibian.api.controller.*.*(..))")
-    public void webLog(){}
-
-    @Before("webLog()")
-    public void deBefore(JoinPoint joinPoint) throws Throwable {
-        System.out.println("good kdfasf sdfafsdfsd55 1");
-    }
 }
 

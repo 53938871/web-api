@@ -39,7 +39,7 @@ public class WxUser implements Serializable{
     private String businessLicense; //营业执照
     private int point; //积分
     @JsonIgnore
-    private int jobTitle; //职位代码
+    private Integer jobTitle; //职位代码
     private String jotTitleName;
     @JsonIgnore
     private Date updateTime;
@@ -244,11 +244,11 @@ public class WxUser implements Serializable{
         this.point = point;
     }
 
-    public int getJobTitle() {
+    public Integer getJobTitle() {
         return jobTitle;
     }
 
-    public void setJobTitle(int jobTitle) {
+    public void setJobTitle(Integer jobTitle) {
         this.jobTitle = jobTitle;
     }
 

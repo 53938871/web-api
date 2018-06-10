@@ -16,6 +16,15 @@ public class WxProperties {
     @Value("${wx.jsapi.url}")
     private String jsapiUrl;
 
+    @Value("${wx.appid}")
+    private String appid;
+
+    @Value("${wx.secret}")
+    private String secret;
+
+    @Value("${wx.token.url}")
+    private String tokenUrl;
+
     public String getAccessTokenUrl() {
         return accessTokenUrl;
     }
@@ -38,5 +47,29 @@ public class WxProperties {
 
     public void setJsapiUrl(String jsapiUrl) {
         this.jsapiUrl = jsapiUrl;
+    }
+
+    public String getAppid() {
+        return appid;
+    }
+
+    public void setAppid(String appid) {
+        this.appid = appid;
+    }
+
+    public String getSecret() {
+        return secret;
+    }
+
+    public void setSecret(String secret) {
+        this.secret = secret;
+    }
+
+    public String getTokenUrl() {
+        return tokenUrl;
+    }
+
+    public void setTokenUrl(String tokenUrl) {
+        this.tokenUrl = tokenUrl;
     }
 }

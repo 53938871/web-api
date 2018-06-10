@@ -32,8 +32,9 @@ public class WxUserController {
 
     @RequestMapping(value = "", method = RequestMethod.GET)
     @ApiOperation(value = "根据openid查找用户",response = WxUser.class)
-    public ResponseEntity<?> getUserByOpenId(@RequestParam(value = "open_id", required = true) String openId) {
-        WxUser wxUser = wxUserService.getUserByOpenId(openId);
+    public ResponseEntity<?> getUserByOpenId(@RequestParam(value = "open_id", required = true) String openId,
+                                             @RequestParam(value = "parent", required = true) String parent) {
+        WxUser wxUser = wxUserService.getUserByOpenId(openId, parent);
         return new ResponseEntity<WxUser>(wxUser, HttpStatus.OK);
     }
 
@@ -105,9 +106,11 @@ public class WxUserController {
 
     @RequestMapping(value = "/wx/signature", method = RequestMethod.GET)
     @ApiOperation(value = "获取微信签名，nonceStr和timestamp可以不传")
-    public ResponseEntity<?> getSignature(@RequestParam String accessToken, @RequestParam String url,
+    public ResponseEntity<?> getSignature(@RequestParam String url,
                                           @RequestParam(value = "nonceStr", required = false) String nonceStr,
                                           @RequestParam(value = "timestamp", required = false) String timestamp) {
+        JSONObject tokenJson = wxUserService.getAccessToken();
+        String accessToken = tokenJson.getString("access_token");
         JSONObject result = wxUserService.getSignature(accessToken, url, nonceStr, timestamp);
         return new ResponseEntity<JSONObject>(result, HttpStatus.OK);
     }

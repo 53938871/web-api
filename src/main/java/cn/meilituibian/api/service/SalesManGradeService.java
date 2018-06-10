@@ -18,4 +18,9 @@ public class SalesManGradeService {
         List<SalesmanGrade> list = salesManGradeMapper.listGrade();
         return list;
     }
+
+    //在这里判断业务员的业绩
+    public void todo(String openId) {
+
+    }
 }
