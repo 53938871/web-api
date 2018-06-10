@@ -45,6 +45,11 @@ public class WxUserService {
         return user;
     }
 
+    public WxUser getUserByOpenId(String openId) {
+        WxUser wxUser = wxUserMapper.getWxUserByOpenId(openId);
+        return wxUser;
+    }
+
     public WxUser getUserByOpenId(String openId, String parent) {
         WxUser wxUser = wxUserMapper.getWxUserByOpenId(openId);
         if (wxUser == null) {
