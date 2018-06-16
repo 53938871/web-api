@@ -1,7 +1,9 @@
 package cn.meilituibian.api.service;
 
 import cn.meilituibian.api.common.ElevocIdGenerator;
+import cn.meilituibian.api.common.OrderNoGenerator;
 import cn.meilituibian.api.domain.Order;
+import cn.meilituibian.api.domain.WxUser;
 import cn.meilituibian.api.mapper.OrderMapper;
 import cn.meilituibian.api.mapper.ProjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,9 @@ public class OrderService {
     @Autowired
     private ProjectMapper projectMapper;
 
+    @Autowired
+    private WxUserService wxUserService;
+
     public List<Order> getOrderByOpenIdAndProject(String openId, int projectId) {
         Map<String, Object> param = new HashMap<>();
         param.put("openId", openId);
@@ -29,7 +34,8 @@ public class OrderService {
     }
 
     public Long insertOrder(Order order) {
-        String orderNo = ElevocIdGenerator.uuid32();
+        WxUser wxUser = wxUserService.getUserByOpenId(order.getOpenId());
+        String orderNo = OrderNoGenerator.generateOrderNo(wxUser.getUserId());
         order.setOrderNo(orderNo);
         order.setCreateDate(new Date());
         Long id = orderMapper.insertOrder(order);
