@@ -53,10 +53,7 @@ public class WxUserService {
             wxUser.setParent(parent);
             wxUser.setJobTitle(StringUtils.isEmpty(parent) ? JobTitleEnum.INDIVIDUAL.getTitleCode() : JobTitleEnum.MEMBER.getTitleCode());
             wxUserMapper.insertWxUser(wxUser);
-        } else {
-            List<SalesmanGrade> list = salesManGradeService.getGradeList();
         }
-
         return wxUser;
     }
 

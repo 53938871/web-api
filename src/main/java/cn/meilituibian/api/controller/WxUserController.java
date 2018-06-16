@@ -110,6 +110,10 @@ public class WxUserController {
                                           @RequestParam(value = "nonceStr", required = false) String nonceStr,
                                           @RequestParam(value = "timestamp", required = false) String timestamp) {
         JSONObject tokenJson = wxUserService.getAccessToken();
+        if (tokenJson == null ) {
+            ErrorResponseEntity entity = ErrorResponseEntity.fail(null, HttpStatus.BAD_REQUEST.value(), "获取AccessToken失败");
+            return new ResponseEntity<ErrorResponseEntity>(entity, HttpStatus.OK);
+        }
         String accessToken = tokenJson.getString("access_token");
         JSONObject result = wxUserService.getSignature(accessToken, url, nonceStr, timestamp);
         return new ResponseEntity<JSONObject>(result, HttpStatus.OK);
