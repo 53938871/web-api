@@ -33,8 +33,9 @@ public class WxUserController {
     @RequestMapping(value = "", method = RequestMethod.GET)
     @ApiOperation(value = "根据openid查找用户",response = WxUser.class)
     public ResponseEntity<?> getUserByOpenId(@RequestParam(value = "open_id", required = true) String openId,
-                                             @RequestParam(value = "parent", required = true) String parent) {
-        WxUser wxUser = wxUserService.getUserByOpenId(openId, parent);
+                                             @RequestParam(value = "parent", required = true) String parent,
+                                             @RequestParam(value = "nickName", required = false) String nickName) {
+        WxUser wxUser = wxUserService.getUserByOpenId(openId, parent, nickName);
         return new ResponseEntity<WxUser>(wxUser, HttpStatus.OK);
     }
 

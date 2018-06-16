@@ -50,12 +50,13 @@ public class WxUserService {
         return wxUser;
     }
 
-    public WxUser getUserByOpenId(String openId, String parent) {
+    public WxUser getUserByOpenId(String openId, String parent, String nickName) {
         WxUser wxUser = wxUserMapper.getWxUserByOpenId(openId);
         if (wxUser == null) {
             wxUser = new WxUser();
             wxUser.setOpenId(openId);
             wxUser.setParent(parent);
+            wxUser.setNickName(nickName);
             wxUser.setJobTitle(StringUtils.isEmpty(parent) ? JobTitleEnum.INDIVIDUAL.getTitleCode() : JobTitleEnum.MEMBER.getTitleCode());
             wxUserMapper.insertWxUser(wxUser);
         }

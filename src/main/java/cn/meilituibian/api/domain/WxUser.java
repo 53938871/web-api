@@ -14,10 +14,13 @@ public class WxUser implements Serializable{
     private Long userId;
     private String openId;
     private String userName; //用户名，用来登录
+    private String nickName; //微信昵称
     private String shopName; //店名
     private String contact;//联系人
     private String taxpayerCode; //纳税人编号
+    @JsonIgnore
     private int sex;  //0女，1男
+    @JsonIgnore
     private String sexName;
     private String city; //城市
     private String province; //省份
@@ -272,4 +275,11 @@ public class WxUser implements Serializable{
         return UserTypeEnum.getTypeName(this.userType);
     }
 
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
+    }
 }

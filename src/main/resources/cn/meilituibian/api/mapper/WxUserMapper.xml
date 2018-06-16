@@ -4,7 +4,7 @@
 
 <mapper namespace="cn.meilituibian.api.mapper.WxUserMapper">
     <sql id="select_wx_user">
-        select user_id as userId,open_id as openId,user_name as userName, shop_name as shopName,contact,sex as sex,city,province,remark,create_time as createTime,user_type as userType,
+        select user_id as userId,open_id as openId,user_name as userName, nick_name as nickName, shop_name as shopName,contact,sex as sex,city,province,remark,create_time as createTime,user_type as userType,
         contract_no as contractNo,parent,number_id as numberId,phone,address, password,taxpayer_code as taxpayerCode,business_license as businessLicense,point,job_title as jobTitle,update_time as updateTime from Wx_User
     </sql>
 
@@ -17,8 +17,8 @@
     </select>
 
     <insert id="insertWxUser" keyColumn="user_id" keyProperty="userId" useGeneratedKeys="true" parameterType="cn.meilituibian.api.domain.WxUser">
-        insert into wx_user(open_id,user_name,shop_name,contact,sex,city,province,remark,create_time,user_type,contract_no,parent,number_id,phone,address,password,taxpayer_code,business_license,job_title, update_time)
-        values(#{openId},#{userName},#{shopName},#{contact},#{sex},#{city},#{province},#{remark},#{createTime},#{userType},#{contractNo},#{parent},#{numberId},#{phone},#{address},#{password},#{taxpayerCode},#{businessLicense},#{jobTitle},#{updateTime})
+        insert into wx_user(open_id,user_name,nick_name,shop_name,contact,sex,city,province,remark,create_time,user_type,contract_no,parent,number_id,phone,address,password,taxpayer_code,business_license,job_title, update_time)
+        values(#{openId},#{userName},#{nickName}, #{shopName},#{contact},#{sex},#{city},#{province},#{remark},#{createTime},#{userType},#{contractNo},#{parent},#{numberId},#{phone},#{address},#{password},#{taxpayerCode},#{businessLicense},#{jobTitle},#{updateTime})
     </insert>
 
     <update id="updateWxUser" >
