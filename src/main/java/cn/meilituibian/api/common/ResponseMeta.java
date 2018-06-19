@@ -1,6 +1,8 @@
 package cn.meilituibian.api.common;
 
-public class ResponseMeta {
+import java.io.Serializable;
+
+public class ResponseMeta implements Serializable{
     private int code;
     private String message;
     private Object data;

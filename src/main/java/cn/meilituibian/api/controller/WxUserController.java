@@ -9,15 +9,18 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping(value = "/users", produces ={ MediaType.APPLICATION_JSON_UTF8_VALUE, MediaType.APPLICATION_JSON_VALUE })
 @Api(value="weixin user info", description="微信用户信息")
 public class WxUserController {
     @Autowired
@@ -39,28 +42,31 @@ public class WxUserController {
         return new ResponseEntity<WxUser>(wxUser, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/save", method = RequestMethod.POST)
-    @ApiOperation(value = "保存用户信息 userType(0:普通用户,1:商家)",response = Long.class)
+    @ApiOperation(value = "保存用户信息 userType(0:普通用户,1:商家)")
+    @RequestMapping(value = {"/save"}, method = RequestMethod.POST)
     public ResponseEntity<?> insertWxUser(@RequestBody WxUser wxUser) {
         WxUser existUser = wxUserService.getWxUserIdByOpenId(wxUser.getOpenId());
         if (existUser != null) {
-            return new ResponseEntity<WxUser>(existUser, HttpStatus.OK);
+            ErrorResponseEntity entity = ErrorResponseEntity.fail(wxUser, ErrorCode.USER_EXISTS.getCode(), ErrorCode.USER_EXISTS.getMessage());
+            return new ResponseEntity<ErrorResponseEntity>(entity, HttpStatus.BAD_REQUEST);
         }
         if (StringUtils.isEmpty(wxUser.getUserName())) {
-            ErrorResponseEntity entity = ErrorResponseEntity.fail(wxUser, ErrorCode.USER_NAME_IS_EMPTY.getCode(), "用户名不能为空");
+            ErrorResponseEntity entity = ErrorResponseEntity.fail(wxUser, ErrorCode.USER_NAME_IS_EMPTY.getCode(), ErrorCode.USER_NAME_IS_EMPTY.getMessage());
             return new ResponseEntity<ErrorResponseEntity>(entity, HttpStatus.BAD_REQUEST);
         }
         if (StringUtils.isEmpty(wxUser.getPhone())) {
-            ErrorResponseEntity entity = ErrorResponseEntity.fail(wxUser, ErrorCode.PHONE_IS_EMPTY.getCode(), "手机号码不能为空");
+            ErrorResponseEntity entity = ErrorResponseEntity.fail(wxUser, ErrorCode.PHONE_IS_EMPTY.getCode(), ErrorCode.PHONE_IS_EMPTY.getMessage());
             return new ResponseEntity<ErrorResponseEntity>(entity, HttpStatus.BAD_REQUEST);
         }
         WxUser tempUser = wxUserService.findWxUserByPhone(wxUser.getPhone());
         if (tempUser != null) {
-            ErrorResponseEntity entity = ErrorResponseEntity.fail(wxUser, ErrorCode.PHONE_IS_EXISTS.getCode(), "此手机号码已存在");
+            ErrorResponseEntity entity = ErrorResponseEntity.fail(wxUser, ErrorCode.PHONE_IS_EXISTS.getCode(), ErrorCode.PHONE_IS_EXISTS.getMessage());
             return new ResponseEntity<ErrorResponseEntity>(entity, HttpStatus.BAD_REQUEST);
         }
         WxUser currentUser = wxUserService.insertWxUser(wxUser);
-        return new ResponseEntity<WxUser>(currentUser, HttpStatus.OK);
+        Map<String, Long> map = new HashMap<>();
+        map.put("userId", currentUser.getUserId());
+        return new ResponseEntity<Map<String, Long>>(map, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)

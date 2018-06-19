@@ -9,6 +9,7 @@ public enum ErrorCode{
     BAD_REQUEST(400, "错误的请求"),
     USER_NOT_FOUND(10404, "没有此用户"),
     USER_NAME_IS_EMPTY(101400, "用户名不能为空"),
+    USER_EXISTS(101400, "用户已存在"),
     PHONE_IS_EMPTY(102400, "手机号码不能为空"),
     PHONE_IS_EXISTS(102400, "此手机号码已存在"),
     INTERNAL_SERVER_ERROR(500, "内部服务错误");
