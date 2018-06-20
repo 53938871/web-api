@@ -36,10 +36,8 @@ public class ResponseEntityAspect {
                 ErrorResponseEntity errorResponseEntity = (ErrorResponseEntity)responseBody;
                 responseMeta.setMessage(errorResponseEntity.getErrorMsg());
                 responseMeta.setCode(errorResponseEntity.getErrorCode());
-                //responseMeta.setData(errorResponseEntity.getData());
-                HttpHeaders headers = new HttpHeaders();
-                headers.add("Content-Type", MediaType.APPLICATION_JSON_VALUE);
-                return new ResponseEntity<>(responseMeta, headers, HttpStatus.OK);
+                responseMeta.setData(errorResponseEntity.getData());
+                return new ResponseEntity<>(responseMeta, responseHeaders, HttpStatus.OK);
             }
 
             responseMeta.setData(responseBody);

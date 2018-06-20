@@ -17,8 +17,8 @@
     </select>
 
     <insert id="insertWxUser" keyColumn="user_id" keyProperty="userId" useGeneratedKeys="true" parameterType="cn.meilituibian.api.domain.WxUser">
-        insert into wx_user(open_id,user_name,nick_name,shop_name,contact,sex,city,province,remark,create_time,user_type,contract_no,parent,number_id,phone,address,password,taxpayer_code,business_license,job_title, update_time)
-        values(#{openId},#{userName},#{nickName}, #{shopName},#{contact},#{sex},#{city},#{province},#{remark},#{createTime},#{userType},#{contractNo},#{parent},#{numberId},#{phone},#{address},#{password},#{taxpayerCode},#{businessLicense},#{jobTitle},#{updateTime})
+        insert into wx_user(open_id,user_name,nick_name,shop_name,contact,city,province,remark,create_time,user_type,contract_no,parent,number_id,phone,address,password,taxpayer_code,business_license,job_title, update_time)
+        values(#{openId},#{userName},#{nickName}, #{shopName},#{contact},#{city},#{province},#{remark},#{createTime},#{userType},#{contractNo},#{parent},#{numberId},#{phone},#{address},#{password},#{taxpayerCode},#{businessLicense},#{jobTitle},#{updateTime})
     </insert>
 
     <update id="updateWxUser" >
@@ -27,7 +27,6 @@
             <if test="userName != null">user_name=#{userName},</if>
             <if test="shopName != null">shop_name=#{shopName},</if>
             <if test="contact != null">contact=#{contact},</if>
-            <if test="sex != null">sex=#{sex},</if>
             <if test="city != null">city=#{city},</if>
             <if test="province != null">province=#{province},</if>
             <if test="head_url != null">head_url=#{headUrl},</if>

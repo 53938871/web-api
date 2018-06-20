@@ -2,7 +2,7 @@ package cn.meilituibian.api.service;
 
 import cn.meilituibian.api.WxProperties;
 import cn.meilituibian.api.common.JobTitleEnum;
-import cn.meilituibian.api.domain.SalesmanGrade;
+import cn.meilituibian.api.common.UserTypeEnum;
 import cn.meilituibian.api.domain.WxUser;
 import cn.meilituibian.api.mapper.WxUserMapper;
 import com.alibaba.fastjson.JSONObject;
@@ -47,6 +47,7 @@ public class WxUserService {
 
     public WxUser getUserByOpenId(String openId) {
         WxUser wxUser = wxUserMapper.getWxUserByOpenId(openId);
+        processWxUser(wxUser);
         return wxUser;
     }
 
@@ -57,10 +58,15 @@ public class WxUserService {
             wxUser.setOpenId(openId);
             wxUser.setParent(parent);
             wxUser.setNickName(nickName);
-            wxUser.setJobTitle(StringUtils.isEmpty(parent) ? JobTitleEnum.INDIVIDUAL.getTitleCode() : JobTitleEnum.MEMBER.getTitleCode());
             wxUserMapper.insertWxUser(wxUser);
         }
+        processWxUser(wxUser);
         return wxUser;
+    }
+
+    private void processWxUser(WxUser wxUser) {
+        wxUser.setUserTypeName(UserTypeEnum.getTypeName(wxUser.getUserType()));
+        wxUser.setJotTitleName(JobTitleEnum.getTitle(wxUser.getJobTitle()));
     }
 
     public WxUser getWxUserIdByOpenId(String openId) {

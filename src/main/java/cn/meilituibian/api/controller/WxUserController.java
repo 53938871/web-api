@@ -36,7 +36,7 @@ public class WxUserController {
     @RequestMapping(value = "", method = RequestMethod.GET)
     @ApiOperation(value = "根据openid查找用户",response = WxUser.class)
     public ResponseEntity<?> getUserByOpenId(@RequestParam(value = "open_id", required = true) String openId,
-                                             @RequestParam(value = "parent", required = true) String parent,
+                                             @RequestParam(value = "parent", required = false) String parent,
                                              @RequestParam(value = "nickName", required = false) String nickName) {
         WxUser wxUser = wxUserService.getUserByOpenId(openId, parent, nickName);
         return new ResponseEntity<WxUser>(wxUser, HttpStatus.OK);
@@ -47,11 +47,7 @@ public class WxUserController {
     public ResponseEntity<?> insertWxUser(@RequestBody WxUser wxUser) {
         WxUser existUser = wxUserService.getWxUserIdByOpenId(wxUser.getOpenId());
         if (existUser != null) {
-            ErrorResponseEntity entity = ErrorResponseEntity.fail(wxUser, ErrorCode.USER_EXISTS.getCode(), ErrorCode.USER_EXISTS.getMessage());
-            return new ResponseEntity<ErrorResponseEntity>(entity, HttpStatus.BAD_REQUEST);
-        }
-        if (StringUtils.isEmpty(wxUser.getUserName())) {
-            ErrorResponseEntity entity = ErrorResponseEntity.fail(wxUser, ErrorCode.USER_NAME_IS_EMPTY.getCode(), ErrorCode.USER_NAME_IS_EMPTY.getMessage());
+            ErrorResponseEntity entity = ErrorResponseEntity.fail(existUser, ErrorCode.USER_EXISTS.getCode(), ErrorCode.USER_EXISTS.getMessage());
             return new ResponseEntity<ErrorResponseEntity>(entity, HttpStatus.BAD_REQUEST);
         }
         if (StringUtils.isEmpty(wxUser.getPhone())) {
@@ -64,9 +60,7 @@ public class WxUserController {
             return new ResponseEntity<ErrorResponseEntity>(entity, HttpStatus.BAD_REQUEST);
         }
         WxUser currentUser = wxUserService.insertWxUser(wxUser);
-        Map<String, Long> map = new HashMap<>();
-        map.put("userId", currentUser.getUserId());
-        return new ResponseEntity<Map<String, Long>>(map, HttpStatus.OK);
+        return new ResponseEntity<WxUser>(currentUser, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)

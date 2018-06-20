@@ -15,7 +15,7 @@ public enum JobTitleEnum {
                 return titleEnum.titleName;
             }
         }
-        return null;
+        return INDIVIDUAL.name();
     }
 
     public int getTitleCode() {

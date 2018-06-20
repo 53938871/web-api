@@ -15,6 +15,6 @@ public enum UserTypeEnum {
                 return userTypeEnum.name;
             }
         }
-        return null;
+        return NORMAL.name();
     }
 }

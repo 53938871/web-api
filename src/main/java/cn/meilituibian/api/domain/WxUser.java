@@ -18,10 +18,6 @@ public class WxUser implements Serializable{
     private String shopName; //店名
     private String contact;//联系人
     private String taxpayerCode; //纳税人编号
-    @JsonIgnore
-    private int sex;  //0女，1男
-    @JsonIgnore
-    private String sexName;
     private String city; //城市
     private String province; //省份
     private String headUrl;
@@ -41,26 +37,17 @@ public class WxUser implements Serializable{
     private String statusName; //0：末审核，1：已审核
     private String businessLicense; //营业执照
     private int point; //积分
-    @JsonIgnore
-    private Integer jobTitle; //职位代码
+    private int jobTitle = -1; //职位代码
     private String jotTitleName;
-    @JsonIgnore
+    @JsonFormat(pattern="yyyy-MM-dd")
     private Date updateTime;
 
-    public String getStatusName() {
-        return this.status == 0 ? "末审核" : "已审核";
+    public String getPassword() {
+        return password;
     }
 
-    public void setStatusName(int statusName) {
-        this.statusName = this.status == 0 ? "末审核" : "已审核";
-    }
-
-    public String getSexName() {
-        return this.sex == 0 ? "女": "男";
-    }
-
-    public void setSexName(String sexStr) {
-        this.sexName = this.sex == 0 ? "女": "男";
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public Long getUserId() {
@@ -79,12 +66,44 @@ public class WxUser implements Serializable{
         this.openId = openId;
     }
 
-    public int getSex() {
-        return sex;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setSex(int sex) {
-        this.sex = sex;
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
+    }
+
+    public String getShopName() {
+        return shopName;
+    }
+
+    public void setShopName(String shopName) {
+        this.shopName = shopName;
+    }
+
+    public String getContact() {
+        return contact;
+    }
+
+    public void setContact(String contact) {
+        this.contact = contact;
+    }
+
+    public String getTaxpayerCode() {
+        return taxpayerCode;
+    }
+
+    public void setTaxpayerCode(String taxpayerCode) {
+        this.taxpayerCode = taxpayerCode;
     }
 
     public String getCity() {
@@ -143,6 +162,14 @@ public class WxUser implements Serializable{
         this.userType = userType;
     }
 
+    public String getUserTypeName() {
+        return userTypeName;
+    }
+
+    public void setUserTypeName(String userTypeName) {
+        this.userTypeName = userTypeName;
+    }
+
     public String getContractNo() {
         return contractNo;
     }
@@ -183,14 +210,6 @@ public class WxUser implements Serializable{
         this.numberId = numberId;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public int getStatus() {
         return status;
     }
@@ -199,36 +218,12 @@ public class WxUser implements Serializable{
         this.status = status;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getStatusName() {
+        return statusName;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public String getShopName() {
-        return shopName;
-    }
-
-    public void setShopName(String shopName) {
-        this.shopName = shopName;
-    }
-
-    public String getContact() {
-        return contact;
-    }
-
-    public void setContact(String contact) {
-        this.contact = contact;
-    }
-
-    public String getTaxpayerCode() {
-        return taxpayerCode;
-    }
-
-    public void setTaxpayerCode(String taxpayerCode) {
-        this.taxpayerCode = taxpayerCode;
+    public void setStatusName(String statusName) {
+        this.statusName = statusName;
     }
 
     public String getBusinessLicense() {
@@ -256,7 +251,7 @@ public class WxUser implements Serializable{
     }
 
     public String getJotTitleName() {
-        return JobTitleEnum.getTitle(this.jobTitle);
+        return jotTitleName;
     }
 
     public void setJotTitleName(String jotTitleName) {
@@ -269,17 +264,5 @@ public class WxUser implements Serializable{
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
-    }
-
-    public String getUserTypeName() {
-        return UserTypeEnum.getTypeName(this.userType);
-    }
-
-    public String getNickName() {
-        return nickName;
-    }
-
-    public void setNickName(String nickName) {
-        this.nickName = nickName;
     }
 }
