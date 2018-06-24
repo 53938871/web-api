@@ -45,15 +45,6 @@ public class WxUserController {
     @ApiOperation(value = "保存用户信息 userType(0:普通用户,1:商家)")
     @RequestMapping(value = {"/save"}, method = RequestMethod.POST)
     public ResponseEntity<?> insertWxUser(@RequestBody WxUser wxUser) {
-        WxUser existUser = wxUserService.getWxUserIdByOpenId(wxUser.getOpenId());
-        if (existUser != null) {
-            ErrorResponseEntity entity = ErrorResponseEntity.fail(existUser, ErrorCode.USER_EXISTS.getCode(), ErrorCode.USER_EXISTS.getMessage());
-            return new ResponseEntity<ErrorResponseEntity>(entity, HttpStatus.BAD_REQUEST);
-        }
-        if (StringUtils.isEmpty(wxUser.getPhone())) {
-            ErrorResponseEntity entity = ErrorResponseEntity.fail(wxUser, ErrorCode.PHONE_IS_EMPTY.getCode(), ErrorCode.PHONE_IS_EMPTY.getMessage());
-            return new ResponseEntity<ErrorResponseEntity>(entity, HttpStatus.BAD_REQUEST);
-        }
         WxUser tempUser = wxUserService.findWxUserByPhone(wxUser.getPhone());
         if (tempUser != null) {
             ErrorResponseEntity entity = ErrorResponseEntity.fail(wxUser, ErrorCode.PHONE_IS_EXISTS.getCode(), ErrorCode.PHONE_IS_EXISTS.getMessage());

@@ -1,7 +1,5 @@
 package cn.meilituibian.api.domain;
 
-import cn.meilituibian.api.common.JobTitleEnum;
-import cn.meilituibian.api.common.UserTypeEnum;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 

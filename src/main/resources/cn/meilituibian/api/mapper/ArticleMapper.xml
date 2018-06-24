@@ -4,11 +4,11 @@
 
 <mapper namespace="cn.meilituibian.api.mapper.ArticleMapper">
     <select id="selectArticles" resultType="cn.meilituibian.api.domain.Article">
-        select id,title, author,source,category,create_date as createDate,icon from Article where status=1
+        select id,title, author,source,category,description,create_date as createDate,icon from Article where status=1
     </select>
 
     <select id="getArticleById" resultType="cn.meilituibian.api.domain.Article">
-        select id,title, author,source,category,content,create_date as createDate,icon from Article where status=1 and id=#{id}
+        select id,title, author,source,category,description,content,create_date as createDate,icon from Article where status=1 and id=#{id}
     </select>
 
 </mapper>
