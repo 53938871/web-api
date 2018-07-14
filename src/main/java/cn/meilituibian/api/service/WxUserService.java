@@ -4,6 +4,7 @@ import cn.meilituibian.api.WxProperties;
 import cn.meilituibian.api.common.JobTitleEnum;
 import cn.meilituibian.api.common.UserTypeEnum;
 import cn.meilituibian.api.domain.WxUser;
+import cn.meilituibian.api.exception.ApiException;
 import cn.meilituibian.api.mapper.WxUserMapper;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.logging.log4j.LogManager;
@@ -47,6 +48,9 @@ public class WxUserService {
 
     public WxUser getUserByOpenId(String openId) {
         WxUser wxUser = wxUserMapper.getWxUserByOpenId(openId);
+        if (wxUser == null) {
+            throw new RuntimeException("用户不存在");
+        }
         processWxUser(wxUser);
         return wxUser;
     }
@@ -221,8 +225,8 @@ public class WxUserService {
         return Long.toString(System.currentTimeMillis() / 1000);
     }
 
-    public void upgrade(String openId) {
-        wxUserMapper.upgrade(openId);
+    public void upgrade(WxUser wxUser) {
+        wxUserMapper.upgrade(wxUser);
     }
 
 }

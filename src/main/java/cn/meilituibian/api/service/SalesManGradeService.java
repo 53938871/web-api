@@ -62,6 +62,8 @@ public class SalesManGradeService {
             result.put(UPGRADE, true);
             result.put("jobTitle", promotionGrade.getTitleCode());
             result.put("jobTitleName", promotionGrade.getTitleName());
+        } else {
+            result.put("gap", promotionGrade.getAmountMoney().divide(price));
         }
         return result;
     }

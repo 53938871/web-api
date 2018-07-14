@@ -62,6 +62,13 @@
     </select>
 
     <update id="upgrade">
-        update wx_user set job_title=job_title + 1 where open_id=#{openId}
+        update wx_user
+        <set>
+               job_title=job_title + 1,
+               <if test="userName != null">user_name=#{userName},</if>
+               <if test="phone != null">phone=#{phone},</if>
+               <if test="numberId != null">number_id=#{numberId}</if>
+        </set>
+        where open_id=#{openId}
     </update>
 </mapper>

@@ -131,13 +131,14 @@ public class WxUserController {
 
     @PostMapping(value = "/upgrade/{openId}")
     @ApiOperation(value = "用户升级")
-    public ResponseEntity<?> upgrade(@PathVariable("openId") String openId) {
-        wxUserService.upgrade(openId);
+    public ResponseEntity<?> upgrade(@PathVariable("openId") String openId, @RequestBody WxUser wxUser) {
+        wxUser.setOpenId(openId);
+        wxUserService.upgrade(wxUser);
         WxUser user = wxUserService.getUserByOpenId(openId);
         return new ResponseEntity<WxUser>(user, HttpStatus.OK);
     }
 
-    @GetMapping("/upgrade/{openId}")
+    @GetMapping("/upgrade/{openId}/info")
     @ApiOperation(value = "得到升级信息")
     public ResponseEntity<?> upgradeInfo(@PathVariable String openId) {
         Map<String,Object> result = salesManGradeService.upgrade(openId);

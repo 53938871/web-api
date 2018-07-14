@@ -26,5 +26,5 @@ public interface WxUserMapper {
 
     WxUser getWxUserIdByOpenId(String openId);
 
-    void upgrade(@Param("openId") String openId);
+    void upgrade(WxUser wxUser);
 }
