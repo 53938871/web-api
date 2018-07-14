@@ -72,4 +72,8 @@
          select <include refid="short_field"/>  from `order` where open_id=#{openId} and project_Id=#{projectId} and status=0
     </select>
 
+    <select id="computePrice" resultType="java.math.BigDecimal">
+        SELECT SUM(price) price FROM `order` WHERE (open_id=#{openId} OR parent_open_id=#{openId} ) AND update_date >= DATE_ADD(NOW(), INTERVAL #{month} MONTH) AND `status`=2
+    </select>
+
 </mapper>

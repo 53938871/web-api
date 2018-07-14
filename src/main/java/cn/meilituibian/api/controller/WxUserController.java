@@ -1,8 +1,10 @@
 package cn.meilituibian.api.controller;
 
 import cn.meilituibian.api.common.ErrorCode;
+import cn.meilituibian.api.domain.SalesmanGrade;
 import cn.meilituibian.api.domain.WxUser;
 import cn.meilituibian.api.exception.ErrorResponseEntity;
+import cn.meilituibian.api.service.SalesManGradeService;
 import cn.meilituibian.api.service.WxUserService;
 import com.alibaba.fastjson.JSONObject;
 import io.swagger.annotations.Api;
@@ -25,6 +27,9 @@ import java.util.Map;
 public class WxUserController {
     @Autowired
     private WxUserService wxUserService;
+
+    @Autowired
+    private SalesManGradeService salesManGradeService;
 
     @RequestMapping(value = "/id/{id}", method = RequestMethod.GET)
     @ApiOperation(value = "根据id查找用户",response = WxUser.class)
@@ -121,6 +126,22 @@ public class WxUserController {
             return new ResponseEntity<ErrorResponseEntity>(entity, HttpStatus.OK);
         }
         return new ResponseEntity<JSONObject>(result, HttpStatus.OK);
+    }
+
+
+    @PostMapping(value = "/upgrade/{openId}")
+    @ApiOperation(value = "用户升级")
+    public ResponseEntity<?> upgrade(@PathVariable("openId") String openId) {
+        wxUserService.upgrade(openId);
+        WxUser user = wxUserService.getUserByOpenId(openId);
+        return new ResponseEntity<WxUser>(user, HttpStatus.OK);
+    }
+
+    @GetMapping("/upgrade/{openId}")
+    @ApiOperation(value = "得到升级信息")
+    public ResponseEntity<?> upgradeInfo(@PathVariable String openId) {
+        Map<String,Object> result = salesManGradeService.upgrade(openId);
+        return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
     }
 
 }

@@ -1,15 +1,16 @@
 package cn.meilituibian.api.service;
 
-import cn.meilituibian.api.common.ElevocIdGenerator;
 import cn.meilituibian.api.common.OrderNoGenerator;
 import cn.meilituibian.api.domain.Order;
 import cn.meilituibian.api.domain.WxUser;
 import cn.meilituibian.api.mapper.OrderMapper;
 import cn.meilituibian.api.mapper.ProjectMapper;
+import cn.meilituibian.api.mapper.SalesManGradeMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -25,6 +26,9 @@ public class OrderService {
 
     @Autowired
     private WxUserService wxUserService;
+
+    @Autowired
+    private SalesManGradeMapper salesManGradeMapper;
 
     public List<Order> getOrderByOpenIdAndProject(String openId, int projectId) {
         Map<String, Object> param = new HashMap<>();
@@ -100,4 +104,7 @@ public class OrderService {
         return list;
     }
 
+    public BigDecimal computePrice(int month, String openId) {
+        return orderMapper.computePrice(month, openId);
+    }
 }

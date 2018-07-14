@@ -4,6 +4,7 @@ import cn.meilituibian.api.domain.Order;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -18,4 +19,5 @@ public interface OrderMapper {
     Order getOrderById(Long id);
     List<Order> getOrders(Map<String, Object> paramMap);
     List<Order> findOrderByOpenIdAndProjectId(Map<String, Object> map);
+    BigDecimal computePrice(@Param("month") int month, @Param("openId") String openId);
 }

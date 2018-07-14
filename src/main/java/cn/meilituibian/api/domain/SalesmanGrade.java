@@ -9,6 +9,7 @@ public class SalesmanGrade implements Serializable{
     private String titleName;
     private int months;
     private BigDecimal amountMoney;
+    private BigDecimal revenue; //实际收益
 
     public Long getId() {
         return id;
@@ -48,5 +49,13 @@ public class SalesmanGrade implements Serializable{
 
     public void setAmountMoney(BigDecimal amountMoney) {
         this.amountMoney = amountMoney;
+    }
+
+    public BigDecimal getRevenue() {
+        return revenue;
+    }
+
+    public void setRevenue(BigDecimal revenue) {
+        this.revenue = revenue;
     }
 }

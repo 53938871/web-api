@@ -60,4 +60,8 @@
     <select id="getWxUserIdByOpenId" resultType="cn.meilituibian.api.domain.WxUser">
         <include refid="select_wx_user"/> where open_id=#{openId}
     </select>
+
+    <update id="upgrade">
+        update wx_user set job_title=job_title + 1 where open_id=#{openId}
+    </update>
 </mapper>

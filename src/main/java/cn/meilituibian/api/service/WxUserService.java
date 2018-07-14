@@ -221,4 +221,8 @@ public class WxUserService {
         return Long.toString(System.currentTimeMillis() / 1000);
     }
 
+    public void upgrade(String openId) {
+        wxUserMapper.upgrade(openId);
+    }
+
 }
