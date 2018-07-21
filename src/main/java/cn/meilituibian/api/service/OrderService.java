@@ -105,6 +105,7 @@ public class OrderService {
     }
 
     public BigDecimal computePrice(int month, String openId) {
-        return orderMapper.computePrice(month, openId);
+        BigDecimal price = orderMapper.computePrice(month, openId);
+        return price == null ? new BigDecimal(0) : price;
     }
 }
