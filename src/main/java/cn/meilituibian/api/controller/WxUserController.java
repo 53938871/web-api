@@ -131,7 +131,7 @@ public class WxUserController {
 
     @RequestMapping(value = "/upgrade/{openId}", method = RequestMethod.POST)
     @ApiOperation(value = "用户升级")
-    public ResponseEntity<?> upgrade(@PathVariable("openId") String openId, @RequestBody WxUser wxUser) {
+    public ResponseEntity<?> upgrade(@PathVariable("openId") String openId, @RequestBody(required = false) WxUser wxUser) {
         wxUser.setOpenId(openId);
         wxUserService.upgrade(wxUser);
         WxUser user = wxUserService.getUserByOpenId(openId);

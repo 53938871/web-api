@@ -8,6 +8,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,14 +49,25 @@ public class SalesManGradeService {
         Map<String,Object> result = new HashMap<>();
         result.put(UPGRADE, false);
         result.put("openId", openId);
-        if (wxUser.getJobTitle() == -1) {
-            return result;
-        }
         int promotionGradeCode = wxUser.getJobTitle() + 1;
+
         SalesmanGrade promotionGrade = getPromotionGrade(promotionGradeCode);
         if (promotionGrade == null) {
             return result;
         }
+        if (wxUser.getJobTitle() == -1) {
+            result.put(UPGRADE, true);
+            result.put("jobTitle", promotionGrade.getTitleCode());
+            result.put("jobTitleName", promotionGrade.getTitleName());
+            return result;
+        }
+
+        if (!wxUserService.allowUpgradeByTime(openId, promotionGrade.getMonths())) {
+            result.put(UPGRADE, false);
+            result.put("openId", openId);
+            return result;
+        }
+        Date startDate = wxUser.getUpdateTime(); //升级日期
         BigDecimal price = orderService.computePrice(-1 * promotionGrade.getMonths(), openId);
         result.put("revenue", price);
         if (price.compareTo(promotionGrade.getAmountMoney()) >= 0) {

@@ -18,6 +18,9 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 
 import java.security.MessageDigest;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.*;
 
 import static cn.meilituibian.api.common.Constants.USER_TYPE_MERCHAT;
@@ -226,7 +229,27 @@ public class WxUserService {
     }
 
     public void upgrade(WxUser wxUser) {
+        wxUser.setUpdateTime(new Date());
         wxUserMapper.upgrade(wxUser);
     }
 
+    public boolean allowUpgradeByTime(String openId, int month) {
+        WxUser user = this.getUserByOpenId(openId);
+        Date updateTime = user.getUpdateTime();
+        if (updateTime == null) {
+            return false;
+        }
+        LocalDate localDate = LocalDate.now();
+        int currentMonth = localDate.getMonthValue();
+        Instant instant = updateTime.toInstant();
+        LocalDate updateLocalDate = instant.atZone(ZoneId.systemDefault()).toLocalDate();
+        int updateMonth = updateLocalDate.getMonthValue();
+        return currentMonth - updateMonth == month ? true : false;
+    }
+
+    public static void main(String[] args) {
+        LocalDate localDate = LocalDate.now();
+        int currentMonth = localDate.getMonthValue();
+        System.out.println(currentMonth);
+    }
 }

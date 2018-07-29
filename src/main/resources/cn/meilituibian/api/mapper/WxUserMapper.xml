@@ -68,6 +68,7 @@
                <if test="userName != null">user_name=#{userName},</if>
                <if test="phone != null">phone=#{phone},</if>
                <if test="numberId != null">number_id=#{numberId}</if>
+               <if test="updateTime != null">update_time=#{updateTime}</if>
         </set>
         where open_id=#{openId}
     </update>
