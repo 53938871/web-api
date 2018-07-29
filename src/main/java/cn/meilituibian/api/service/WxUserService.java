@@ -239,17 +239,25 @@ public class WxUserService {
         if (updateTime == null) {
             return false;
         }
-        LocalDate localDate = LocalDate.now();
-        int currentMonth = localDate.getMonthValue();
-        Instant instant = updateTime.toInstant();
-        LocalDate updateLocalDate = instant.atZone(ZoneId.systemDefault()).toLocalDate();
-        int updateMonth = updateLocalDate.getMonthValue();
-        return currentMonth - updateMonth == month ? true : false;
+
+        Calendar current = Calendar.getInstance();
+        Calendar updateCalendar = Calendar.getInstance();
+        updateCalendar.setTime(updateTime);
+        updateCalendar.add(Calendar.MONTH, month);
+        if (current.compareTo(updateCalendar)  >= 0) {
+            return true;
+        }
+        return false;
     }
 
     public static void main(String[] args) {
         LocalDate localDate = LocalDate.now();
         int currentMonth = localDate.getMonthValue();
-        System.out.println(currentMonth);
+        System.out.println(localDate.getYear());
+
+        Calendar c = Calendar.getInstance();
+        c.add(Calendar.MONTH, -2);
+
+        System.out.println(c.getTime());
     }
 }
