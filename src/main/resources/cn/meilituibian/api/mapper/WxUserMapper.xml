@@ -35,7 +35,7 @@
             <if test="contractNo != null">contract_no=#{contractNo},</if>
             <if test="phone != null">phone=#{phone},</if>
             <if test="address != null">address=#{address},</if>
-            <if test="numberId != null">numberId=#{numberId},</if>
+            <if test="numberId != null">number_id=#{numberId},</if>
             <if test="password != null">password=#{password},</if>
             <if test="taxpayerCode != null">taxpayer_code=#{taxpayerCode},</if>
             <if test="point != null">point=#{point},</if>
