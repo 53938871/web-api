@@ -13,6 +13,7 @@ public class Product implements Serializable{
     private int quantity;
     private String type;
     private int status;
+    private String productImgs;
 
     public Long getId() {
         return id;
@@ -84,5 +85,13 @@ public class Product implements Serializable{
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    public String getProductImgs() {
+        return productImgs;
+    }
+
+    public void setProductImgs(String productImgs) {
+        this.productImgs = productImgs;
     }
 }

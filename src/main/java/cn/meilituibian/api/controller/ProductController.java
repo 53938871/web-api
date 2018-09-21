@@ -10,10 +10,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @Api(value="product list", description="产品列表")
@@ -28,5 +25,12 @@ public class ProductController {
         Page<Product> articles = productService.list(pageNo, Constants.PAGE_SIZE);
         PageInfo<Product> result = new PageInfo<>(articles);
         return new ResponseEntity<PageInfo<Product>>(result, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    @ApiOperation(value = "产品详情")
+    public ResponseEntity<?> getProductById(@PathVariable("id") Long id) {
+        Product product = productService.getProductById(id);
+        return new ResponseEntity<Product>(product, HttpStatus.OK);
     }
 }

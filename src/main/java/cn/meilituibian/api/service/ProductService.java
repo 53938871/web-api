@@ -16,4 +16,16 @@ public class ProductService {
         PageHelper.startPage(pageNo, pageSize);
         return productMapper.list();
     }
+
+    public Product getProductById(Long id) {
+        return productMapper.getProductById(id);
+    }
+
+    public int getQuantityById(Long id) {
+        return productMapper.getQuantityById(id);
+    }
+
+    public void substractStock(Long id, int quantity) {
+
+    }
 }
