@@ -25,6 +25,16 @@ public class ProductOrder implements Serializable {
     @JsonFormat(pattern="yyyy-MM-dd HH:mm")
     private Date updateTime;
 
+    public ProductOrder(){}
+
+    public ProductOrder(Long productId, int quantity, String address, String phone, String remark) {
+        this.productId = productId;
+        this.quantity = quantity;
+        this.address = address;
+        this.phone = phone;
+        this.remark = remark;
+    }
+
     public Long getId() {
         return id;
     }

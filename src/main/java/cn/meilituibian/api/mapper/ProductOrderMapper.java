@@ -9,7 +9,7 @@ import org.apache.ibatis.annotations.Mapper;
 public interface ProductOrderMapper {
     ProductOrder findProductOrderByOpenId(String openId);
 
-    ProductOrder saveProductOrder(ProductOrder productOrder);
+    int saveProductOrder(ProductOrder productOrder);
 
-    ProductOrder updateProductOrder(ProductOrder productOrder);
+    int updateProductOrder(ProductOrder productOrder);
 }

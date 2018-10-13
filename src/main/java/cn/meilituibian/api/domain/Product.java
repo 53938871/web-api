@@ -12,8 +12,9 @@ public class Product implements Serializable{
     private BigDecimal price;
     private int quantity;
     private String type;
-    private int status;
+    private int status;  //0:无效,1:有效
     private String productImgs;
+    private Long version;
 
     public Long getId() {
         return id;
@@ -93,5 +94,13 @@ public class Product implements Serializable{
 
     public void setProductImgs(String productImgs) {
         this.productImgs = productImgs;
+    }
+
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
     }
 }

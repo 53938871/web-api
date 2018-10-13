@@ -5,6 +5,8 @@ import cn.meilituibian.api.domain.ProductOrder;
 import com.github.pagehelper.Page;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.Map;
+
 @Mapper
 public interface ProductMapper {
     Page<Product> list();
@@ -12,4 +14,6 @@ public interface ProductMapper {
     int getQuantityById(Long id);
 
     Product getProductById(Long id);
+
+    int subtractStock(Map<String, Object> param);
 }

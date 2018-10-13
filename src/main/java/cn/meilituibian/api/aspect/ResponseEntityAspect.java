@@ -44,6 +44,8 @@ public class ResponseEntityAspect {
             ErrorCode errorCode = ErrorCode.getErrorCode(httpStatus.value() == 200 ? 0 : httpStatus.value());
             responseMeta.setCode(errorCode.getCode());
             responseMeta.setMessage(errorCode.getMessage());
+            //responseMeta.setMessage("系统繁忙请稍后再试");
+            LOGGER.error("httpStatus={},message={}", errorCode.getCode(), errorCode.getMessage());
             return new ResponseEntity<>(responseMeta, responseHeaders, HttpStatus.OK);
 
         } catch (Exception e) {
