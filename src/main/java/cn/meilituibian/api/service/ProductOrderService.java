@@ -4,6 +4,8 @@ import cn.meilituibian.api.domain.Product;
 import cn.meilituibian.api.domain.ProductOrder;
 import cn.meilituibian.api.mapper.ProductMapper;
 import cn.meilituibian.api.mapper.ProductOrderMapper;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,5 +63,23 @@ public class ProductOrderService {
             throw new RuntimeException("当前库存数量不足,请稍候再试");
         }
         return productOrder;
+    }
+
+
+    public Page<ProductOrder> findProductOrderListByUserId(long userId, int pageNo, int pageSize){
+        PageHelper.startPage(pageNo, pageSize);
+        return productOrderMapper.findProductOrderListByUserId(userId);
+    }
+
+    public ProductOrder findProductOrderById(Long id) {
+        return productOrderMapper.findOrderById(id);
+    }
+
+    public int cancelProductOrder(Map<String, Object> paramMap) {
+        return productOrderMapper.cancelProductOrder(paramMap);
+    }
+
+    public int deleteProductOrder(Map<String, Object> paramMap) {
+        return productOrderMapper.deleteProductOrder(paramMap);
     }
 }
