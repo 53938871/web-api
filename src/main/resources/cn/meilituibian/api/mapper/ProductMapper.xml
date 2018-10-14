@@ -4,7 +4,7 @@
 
 <mapper namespace="cn.meilituibian.api.mapper.ProductMapper">
     <select id="list" resultType="Product">
-        select id, name, point, icon,content, price, quantity,'type',status, product_imgs as productImgs,version from product where status=1
+        select id, name, point, icon,content, price, quantity,'type',status, product_imgs as productImgs,version,type_name as typeName from product where status=1
     </select>
 
     <select id="getQuantityById" resultType="int" parameterType="long">
@@ -12,7 +12,7 @@
     </select>
 
     <select id="getProductById" resultType="Product" parameterType="long">
-        select id, name, point, icon,content, price, quantity,'type',status ,product_imgs as productImgs,version from product where id=#{id} and status=1
+        select id, name, point, icon,content, price, quantity,'type',status ,product_imgs as productImgs,version，type_name as typeName from product where id=#{id} and status=1
     </select>
     
     <update id="subtractStock" parameterType="Product">

@@ -11,7 +11,8 @@ public class Product implements Serializable{
     private String content;
     private BigDecimal price;
     private int quantity;
-    private String type;
+    private Long type;
+    private String typeName;
     private int status;  //0:无效,1:有效
     private String productImgs;
     private Long version;
@@ -72,14 +73,6 @@ public class Product implements Serializable{
         this.quantity = quantity;
     }
 
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
     public int getStatus() {
         return status;
     }
@@ -102,5 +95,17 @@ public class Product implements Serializable{
 
     public void setVersion(Long version) {
         this.version = version;
+    }
+
+    public void setType(Long type) {
+        this.type = type;
+    }
+
+    public String getTypeName() {
+        return typeName;
+    }
+
+    public void setTypeName(String typeName) {
+        this.typeName = typeName;
     }
 }
