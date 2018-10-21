@@ -3,17 +3,37 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="cn.meilituibian.api.mapper.ProductOrderMapper">
+
+    <resultMap id="productOrderResultMap" type="ProductOrder">
+        <id property="id" column="id" />
+        <result property="userId" column="user_id"/>
+        <result property="open_id" column="open_id"/>
+        <result property="productId" column="product_id"/>
+        <result property="productName" column="product_name"/>
+        <result property="quantity" column="quantity"/>
+        <result property="address" column="address"/>
+        <result property="phone" column="phone"/>
+        <result property="remark" column="remark"/>
+        <result property="shipOrder" column="ship_order"/>
+        <result property="shipName" column="ship_name"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="deliveryTime" column="delivery_time"/>
+        <result property="receiveTime" column="receive_time"/>
+        <result property="receiver" column="receiver"/>
+        <association property="product" select="cn.meilituibian.api.mapper.ProductMapper.getProductById" column="productId"/>
+    </resultMap>
+
     <insert id="saveProductOrder" parameterType="ProductOrder" keyProperty="id" useGeneratedKeys="true">
-        insert into product_order(order_no,user_id,open_id,product_id,product_name,quantity,address,phone,remark)
-        values(#{orderNo},#{userId},#{openId},#{productId},#{productName},#{quantity},#{address},#{phone},#{remark})
+        insert into product_order(order_no,user_id,open_id,product_id,product_name,quantity,address,phone,remark,receiver)
+        values(#{orderNo},#{userId},#{openId},#{productId},#{productName},#{quantity},#{address},#{phone},#{remark}, #{receiver})
     </insert>
 
-    <select id="findOrderById" parameterType="long" resultType="ProductOrder">
+    <select id="findOrderById" parameterType="long" resultMap="productOrderResultMap">
         SELECT id, user_id AS userId, open_id AS openId,product_id AS productId,product_name AS productName,quantity,address,phone,remark,ship_order AS shipOrder,
         ship_name AS shipName,create_time AS createTime, update_time AS updateTime, delivery_time AS deliveryTime,receive_time AS receiveTime,receiver
         FROM product_order WHERE id = #{id} AND status > -2
     </select>
-
     <select id="findProductOrderListByUserId" resultType="ProductOrder" parameterType="long">
         SELECT id, user_id AS userId, open_id AS openId,product_id AS productId,product_name AS productName,quantity,address,phone,remark,ship_order AS shipOrder,
         ship_name AS shipName,create_time AS createTime, update_time AS updateTime, delivery_time AS deliveryTime,receive_time AS receiveTime,receiver

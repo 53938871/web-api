@@ -19,7 +19,7 @@ public class ApiResponseEntityExceptionHandler extends ResponseEntityExceptionHa
         entity.setErrorCode(500);
         entity.setErrorMsg(ex.getMessage());
         entity.setSuccess(false);
-        LOGGER.error(ex.getMessage());
+        LOGGER.error(ex.toString());
         return new ResponseEntity<>(entity, HttpStatus.OK);
     }
 

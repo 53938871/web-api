@@ -14,16 +14,12 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
 
-@Controller
+@RestController
 @Api(value="product order", description="产品订单")
 @RequestMapping("/product_order")
 public class ProductOrderController {
@@ -36,15 +32,9 @@ public class ProductOrderController {
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     @ApiOperation(value = "兑换产品")
-    public ResponseEntity<?> saveProductOrder(@RequestParam(value = "openId", required = true) String openId,
-                                              @RequestParam(value = "productId", required = true) Long productId,
-                                              @RequestParam(value = "quantity", required = true) int quantity,
-                                              @RequestParam(value = "address", required = true) String address,
-                                              @RequestParam(value = "phone", required = true) String phone, @RequestParam(required = false) String remark) {
-        WxUser wxUser = wxUserService.getUserByOpenId(openId);
-        ProductOrder productOrder = new ProductOrder(productId, quantity, address, phone, remark);
+    public ResponseEntity<?> saveProductOrder(@RequestBody ProductOrder productOrder) {
+        WxUser wxUser = wxUserService.getUserByOpenId(productOrder.getOpenId());
         productOrder.setUserId(wxUser.getUserId());
-        productOrder.setOpenId(openId);
         productOrderService.saveProductOrder(productOrder);
         return new ResponseEntity<ProductOrder>(productOrder, HttpStatus.OK);
     }

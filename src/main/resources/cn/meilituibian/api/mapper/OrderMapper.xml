@@ -50,8 +50,9 @@
         id,open_id as openId,user_name as userName,project_id as projectId,project_name as projectName,phone,subscribe_date as subscribeDate,parent_open_id as parentOpenId,status,order_no as orderNo
     </sql>
     <select id="getPerformancesByOpenId" resultType="Order">
-        SELECT <include refid="short_field"/>  FROM `order` a WHERE a.parent_open_id=#{openId}
-        UNION ALL SELECT <include refid="short_field"/> FROM `order` b WHERE EXISTS (SELECT 1 FROM `order` a WHERE a.parent_open_id=#{openId} AND a.`open_id` = b.parent_open_id )
+        SELECT <include refid="short_field"/> FROM `order` a WHERE a.`parent_open_id`=#{openId} and status=2
+        UNION ALL
+        SELECT <include refid="short_field"/> FROM `order` b WHERE EXISTS (SELECT 1 FROM wx_user WHERE b.parent_open_id = open_id AND parent=#{openId}) and status=2
 
     </select>
 

@@ -1,5 +1,6 @@
 package cn.meilituibian.api.service;
 
+import cn.meilituibian.api.common.OrderNoGenerator;
 import cn.meilituibian.api.domain.Product;
 import cn.meilituibian.api.domain.ProductOrder;
 import cn.meilituibian.api.mapper.ProductMapper;
@@ -33,8 +34,15 @@ public class ProductOrderService {
         boolean updatedFail = true;
         int quantity = productOrder.getQuantity();
         int currentStockQuantity = 0;
+        productOrder.setCreateTime(new Date());
+        productOrder.setOrderNo(OrderNoGenerator.generateOrderNo(productOrder.getUserId()));
+
         while(updatedFail) {
             Product product= productMapper.getProductById(productOrder.getProductId());
+            if (product == null) {
+                LOGGER.error("扣减库存,产品不存在；id={}", productOrder.getProductId());
+                throw new RuntimeException("此产品不存在");
+            }
             currentStockQuantity = product.getQuantity();
             if (quantity > currentStockQuantity) { //库存不够
                 LOGGER.error("扣减库存,产品Id={},库存数量={},兑换数量={}", productOrder.getProductId(), currentStockQuantity, quantity);
@@ -62,6 +70,7 @@ public class ProductOrderService {
             LOGGER.error("扣减库存,产品Id={},库存数量={},兑换数量={}", productOrder.getProductId(), currentStockQuantity, quantity);
             throw new RuntimeException("当前库存数量不足,请稍候再试");
         }
+
         return productOrder;
     }
 

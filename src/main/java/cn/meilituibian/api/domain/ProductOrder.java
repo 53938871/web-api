@@ -26,14 +26,17 @@ public class ProductOrder implements Serializable {
     @JsonFormat(pattern="yyyy-MM-dd HH:mm")
     private Date updateTime;
 
+    private Product product;
+
     public ProductOrder(){}
 
-    public ProductOrder(Long productId, int quantity, String address, String phone, String remark) {
+    public ProductOrder(Long productId, int quantity, String address, String phone, String remark, String receiver) {
         this.productId = productId;
         this.quantity = quantity;
         this.address = address;
         this.phone = phone;
         this.remark = remark;
+        this.receiver = receiver;
     }
 
     public Long getId() {
@@ -162,5 +165,13 @@ public class ProductOrder implements Serializable {
 
     public void setReceiver(String receiver) {
         this.receiver = receiver;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
     }
 }
