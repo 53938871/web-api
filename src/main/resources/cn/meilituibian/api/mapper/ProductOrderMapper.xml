@@ -10,13 +10,13 @@
 
     <select id="findOrderById" parameterType="long" resultType="ProductOrder">
         SELECT id, user_id AS userId, open_id AS openId,product_id AS productId,product_name AS productName,quantity,address,phone,remark,ship_order AS shipOrder,
-        ship_name AS shipName,create_time AS createTime, update_time AS updateTime, delivery_time AS deliveryTime,receive_time AS receiveTime
+        ship_name AS shipName,create_time AS createTime, update_time AS updateTime, delivery_time AS deliveryTime,receive_time AS receiveTime,receiver
         FROM product_order WHERE id = #{id} AND status > -2
     </select>
 
     <select id="findProductOrderListByUserId" resultType="ProductOrder" parameterType="long">
         SELECT id, user_id AS userId, open_id AS openId,product_id AS productId,product_name AS productName,quantity,address,phone,remark,ship_order AS shipOrder,
-        ship_name AS shipName,create_time AS createTime, update_time AS updateTime, delivery_time AS deliveryTime,receive_time AS receiveTime
+        ship_name AS shipName,create_time AS createTime, update_time AS updateTime, delivery_time AS deliveryTime,receive_time AS receiveTime,receiver
         FROM product_order WHERE user_id = #{userId} AND status>-2
     </select>
 

@@ -19,6 +19,7 @@ public class ProductOrder implements Serializable {
     private String shipOrder;
     private String shipName;
     private int status;
+    private String receiver;
     @JsonFormat(pattern="yyyy-MM-dd HH:mm")
     private Date createTime;
 
@@ -153,5 +154,13 @@ public class ProductOrder implements Serializable {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public String getReceiver() {
+        return receiver;
+    }
+
+    public void setReceiver(String receiver) {
+        this.receiver = receiver;
     }
 }

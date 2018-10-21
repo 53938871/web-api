@@ -4,6 +4,7 @@ import cn.meilituibian.api.common.Constants;
 import cn.meilituibian.api.domain.Product;
 import cn.meilituibian.api.domain.ProductType;
 import cn.meilituibian.api.service.ProductService;
+import cn.meilituibian.api.service.ProductTypeService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
@@ -20,6 +21,8 @@ import java.util.List;
 @Api(value="product list", description="产品列表")
 @RequestMapping("/products")
 public class ProductController {
+    @Autowired
+    private ProductTypeService productTypeService;
 
     @Autowired
     private ProductService productService;
@@ -39,14 +42,15 @@ public class ProductController {
     }
 
     @RequestMapping(value = "/types", method = RequestMethod.GET)
-    @ApiOperation(value = "产品类型")
-    public ResponseEntity<?> getProductTypes() {
-        List<ProductType> list = new ArrayList();
-        list.add(new ProductType(1L, "面膜"));
-        list.add(new ProductType(2L, "眼霜"));
-        list.add(new ProductType(3L, "洗面奶"));
-        list.add(new ProductType(5L, "粉底液"));
-        return new ResponseEntity<List>(list, HttpStatus.OK);
+    @ApiOperation(value = "产品类型,无参数则查询所有")
+    public ResponseEntity<?> getProductTypes(@RequestParam(value = "id", required = false) Long id) {
+        if (id == null) {
+            List<ProductType> list = productTypeService.list();
+            return new ResponseEntity<List<ProductType>>(list, HttpStatus.OK);
+        }
+        ProductType productType = productTypeService.findProductTypeById(id);
+        return new ResponseEntity<ProductType>(productType, HttpStatus.OK);
     }
+
 
 }

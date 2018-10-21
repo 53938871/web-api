@@ -66,9 +66,34 @@ public class WxUserService {
             wxUser.setParent(parent);
             wxUser.setNickName(nickName);
             wxUserMapper.insertWxUser(wxUser);
+            processWxUser(wxUser);
+            return wxUser;
         }
+
         processWxUser(wxUser);
+        //如果自己是业务员或没有父节点，则跳过
+        if (isSalesMan(wxUser.getUserType()) || StringUtils.isEmpty(parent)) {
+            return wxUser;
+        }
+        //如果用户存在，则看其记录中的parent_id是不是业务员，如果是跳过此步。
+        //如果其记录中的parent_id不是业务员，则看当前传进来的是不是业务员，如果是则更新parent，否则跳过
+        if (!StringUtils.isEmpty(wxUser.getParent())) {
+            WxUser prevWxUser = wxUserMapper.getWxUserByOpenId(wxUser.getParent());
+            if (!isSalesMan(prevWxUser.getUserType())) {//以前的parent不是业务员
+                WxUser currentWxUser = wxUserMapper.getWxUserByOpenId(parent);
+                if (isSalesMan(currentWxUser.getUserType())) {
+                    wxUser.setParent(parent);
+                    wxUserMapper.updateWxUser(wxUser);
+                }
+            }
+
+        }
+
         return wxUser;
+    }
+
+    private boolean isSalesMan(int userType) {
+        return  UserTypeEnum.SALESMAN.getType() == userType;
     }
 
     private void processWxUser(WxUser wxUser) {

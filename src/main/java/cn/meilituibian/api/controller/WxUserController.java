@@ -39,7 +39,7 @@ public class WxUserController {
     }
 
     @RequestMapping(value = "", method = RequestMethod.GET)
-    @ApiOperation(value = "根据openid查找用户",response = WxUser.class)
+    @ApiOperation(value = "根据openid查找用户,分享后进入此接口",response = WxUser.class)
     public ResponseEntity<?> getUserByOpenId(@RequestParam(value = "open_id", required = true) String openId,
                                              @RequestParam(value = "parent", required = false) String parent,
                                              @RequestParam(value = "nickName", required = false) String nickName) {
@@ -47,7 +47,7 @@ public class WxUserController {
         return new ResponseEntity<WxUser>(wxUser, HttpStatus.OK);
     }
 
-    @ApiOperation(value = "保存用户信息 userType(0:普通用户,1:商家)")
+    @ApiOperation(value = "保存用户信息 userType(0:普通用户,1:商家,2:业务员)")
     @RequestMapping(value = {"/save"}, method = RequestMethod.POST)
     public ResponseEntity<?> insertWxUser(@RequestBody WxUser wxUser) {
         WxUser tempUser = wxUserService.findWxUserByPhone(wxUser.getPhone());

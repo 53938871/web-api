@@ -17,4 +17,8 @@ public enum UserTypeEnum {
         }
         return NORMAL.name();
     }
+
+    public int getType() {
+        return type;
+    }
 }

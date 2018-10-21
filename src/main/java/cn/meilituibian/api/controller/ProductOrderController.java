@@ -34,7 +34,7 @@ public class ProductOrderController {
     @Autowired
     private ProductOrderService productOrderService;
 
-    @RequestMapping(value = "/save", method = RequestMethod.GET)
+    @RequestMapping(value = "/save", method = RequestMethod.POST)
     @ApiOperation(value = "兑换产品")
     public ResponseEntity<?> saveProductOrder(@RequestParam(value = "openId", required = true) String openId,
                                               @RequestParam(value = "productId", required = true) Long productId,
