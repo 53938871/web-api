@@ -35,7 +35,7 @@ public class ShareInfoController {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     @ApiOperation(value = "根据id查看分享信息")
-    public ResponseEntity<?> findShareInfoById(@RequestParam("id") Long id) {
+    public ResponseEntity<?> findShareInfoById(@PathVariable("id") Long id) {
         ShareInfo info = shareInfoService.findShareInfoById(id);
         return new ResponseEntity<ShareInfo>(info, HttpStatus.OK);
 
