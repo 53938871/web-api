@@ -39,4 +39,8 @@ public class ShareInfoService {
     public List<ShareInfo> list(Long userId) {
         return shareInfoMapper.list(userId);
     }
+
+    public ShareInfo findShareInfoById(Long id) {
+        return shareInfoMapper.findShareInfoById(id);
+    }
 }

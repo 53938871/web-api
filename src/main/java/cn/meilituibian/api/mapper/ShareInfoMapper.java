@@ -13,4 +13,6 @@ public interface ShareInfoMapper {
     ShareInfo getShareInfoByUserAndCategory(@Param("userId") Long userId, @Param("categoryId") Long categoryId);
 
     List<ShareInfo> list(@Param("userId") long userId);
+
+    ShareInfo findShareInfoById(@Param("id") Long id);
 }

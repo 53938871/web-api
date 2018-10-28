@@ -17,5 +17,8 @@
         insert into share_info(open_id, user_id, category_id, url, category_name) values(#{openId}, #{userId}, #{categoryId},#{url}, #{categoryName})
     </insert>
 
+    <select id="findShareInfoById" resultType="ShareInfo">
+        select <include refid="fields"/> from share_info where id=#{id} and status=1
+    </select>
 
 </mapper>
