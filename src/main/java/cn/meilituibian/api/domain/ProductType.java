@@ -1,6 +1,7 @@
 package cn.meilituibian.api.domain;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class ProductType implements Serializable {
     private Long id;
@@ -8,6 +9,7 @@ public class ProductType implements Serializable {
     private String name;
     private String icon;
     private int status;
+    private List<Product> productList;
     public ProductType(){}
     public ProductType(Long cat, String name, String icon) {
         this.cat = cat;
@@ -53,5 +55,13 @@ public class ProductType implements Serializable {
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    public List<Product> getProductList() {
+        return productList;
+    }
+
+    public void setProductList(List<Product> productList) {
+        this.productList = productList;
     }
 }

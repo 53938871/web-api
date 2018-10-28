@@ -7,9 +7,18 @@
         select id, cat, name, status,icon from product_type where status=1
     </select>
 
-    <select id="findProductTypeById"  resultType="ProductType">
+    <select id="findProductTypeById"  resultMap="productMap">
         select id,cat, name,status,icon from product_type where status=1 and id=#{id}
     </select>
+
+    <resultMap id="productMap" type="ProductType">
+        <id column="id" property="id"/>
+        <result column="cat" property="cat"/>
+        <result column="name" property="name"/>
+        <result column="icon" property="icon"/>
+        <result column="status" property="status"/>
+        <collection property="productList" column="id" select="cn.meilituibian.api.mapper.ProductMapper.getProductsByType" ofType="cn.meilituibian.api.domain.Product"/>
+    </resultMap>
 
 </mapper>
 
