@@ -21,8 +21,8 @@ public class ShareInfoController {
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     @ApiOperation(value = "保存分享信息")
     public ResponseEntity<?> save(@RequestBody ShareInfo shareInfo) {
-        shareInfoService.saveShareInfo(shareInfo);
-        return new ResponseEntity<ShareInfo>(shareInfo, HttpStatus.OK);
+        ShareInfo info = shareInfoService.saveShareInfo(shareInfo);
+        return new ResponseEntity<ShareInfo>(info, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)

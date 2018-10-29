@@ -19,16 +19,17 @@ public class ShareInfoService {
     private ShareInfoMapper shareInfoMapper;
 
     @Transactional
-    public void saveShareInfo(ShareInfo shareInfo) {
+    public ShareInfo saveShareInfo(ShareInfo shareInfo) {
         ShareInfo currentInfo = getShareInfoByUserAndCategory(shareInfo);
         if (currentInfo != null) {
-            return;
+            return currentInfo;
         }
         int success = shareInfoMapper.saveShareInfo(shareInfo);
         if (success < 1) {
             LOGGER.error("userId={}, categoryId={}, url={}", shareInfo.getUserId(), shareInfo.getCategoryId(), shareInfo.getUrl());
             throw new RuntimeException("保存分享信息失败");
         }
+        return shareInfo;
     }
 
     public ShareInfo getShareInfoByUserAndCategory(ShareInfo shareInfo ){
