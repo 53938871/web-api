@@ -22,6 +22,7 @@ public class Project implements Serializable{
     private BigDecimal maxPrice;
     private int bookNum;
     private String content;
+    private boolean recommend;
 
     private Long parentCategoryId;
 
@@ -175,5 +176,13 @@ public class Project implements Serializable{
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public boolean isRecommend() {
+        return recommend;
+    }
+
+    public void setRecommend(boolean recommend) {
+        this.recommend = recommend;
     }
 }

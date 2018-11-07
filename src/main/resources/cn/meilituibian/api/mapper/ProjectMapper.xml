@@ -3,7 +3,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.meilituibian.api.mapper.ProjectMapper">
     <sql id="sql_field">
-        project_id as projectId ,category_id as categoryId, category_name as categoryName, short_desc as shortDesc, min_price as minPrice, max_price as maxPrice,detail,operation,treatment,recure,advantage,disadvantage,concern,safe,complex, img_path as imgPath,book_num as bookNum,parent_id as parentCategoryId, content
+        project_id as projectId ,category_id as categoryId, category_name as categoryName, short_desc as shortDesc, min_price as minPrice, max_price as maxPrice,detail,operation,treatment,recure,advantage,disadvantage,concern,safe,complex, img_path as imgPath,book_num as bookNum,parent_id as parentCategoryId, content,recommend
     </sql>
     <select id="getProjectByCategoryId" parameterType="long" resultType="Project">
         SELECT <include refid="sql_field"/>
