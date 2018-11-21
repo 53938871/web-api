@@ -31,10 +31,10 @@ public class WxUserController {
     @Autowired
     private SalesManGradeService salesManGradeService;
 
-    @RequestMapping(value = "/id/{id}", method = RequestMethod.GET)
-    @ApiOperation(value = "根据id查找用户",response = WxUser.class)
-    public ResponseEntity<?> getUserById(@PathVariable("id") Long user_id) {
-        WxUser wxUser = wxUserService.getUserById(user_id);
+    @RequestMapping(value = "/id/{guid}", method = RequestMethod.GET)
+    @ApiOperation(value = "根据guid查找用户",response = WxUser.class)
+    public ResponseEntity<?> getUserById(@PathVariable("guid") String guid) {
+        WxUser wxUser = wxUserService.getUserById(guid);
         return new ResponseEntity<WxUser>(wxUser, HttpStatus.OK);
     }
 
@@ -63,7 +63,7 @@ public class WxUserController {
     @ApiOperation(value = "保存用户信息",response = Long.class)
     public ResponseEntity<?> updateWxUser(@RequestBody WxUser wxUser) {
         wxUserService.updateWxUser(wxUser);
-        WxUser user = wxUserService.getUserById(wxUser.getUserId());
+        WxUser user = wxUserService.getUserById(wxUser.getGuid());
         return new ResponseEntity<WxUser>(user, HttpStatus.OK);
     }
 

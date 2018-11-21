@@ -40,11 +40,11 @@ public class WxUserService {
     @Autowired
     private SalesManGradeService salesManGradeService;
 
-    public WxUser getUserById(Long user_id) {
-        WxUser user = wxUserMapper.getWxUserById(user_id);
+    public WxUser getUserById(String guid) {
+        WxUser user = wxUserMapper.getWxUserById(guid);
         if(user == null) {
             user = new WxUser();
-            LOGGER.warn("user is not found; user_id={}", user_id);
+            LOGGER.warn("user is not found; guid={}", guid);
         }
         return user;
     }

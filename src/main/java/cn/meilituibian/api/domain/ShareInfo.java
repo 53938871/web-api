@@ -9,6 +9,7 @@ public class ShareInfo implements Serializable {
     private Long id;
     private Long userId;
     private Long categoryId;
+    private String guid;
 
     private String openId;
     private String categoryName;
@@ -79,5 +80,13 @@ public class ShareInfo implements Serializable {
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+
+    public String getGuid() {
+        return guid;
+    }
+
+    public void setGuid(String guid) {
+        this.guid = guid;
     }
 }

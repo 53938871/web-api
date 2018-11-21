@@ -4,12 +4,12 @@
 
 <mapper namespace="cn.meilituibian.api.mapper.WxUserMapper">
     <sql id="select_wx_user">
-        select user_id as userId,open_id as openId,user_name as userName, nick_name as nickName, shop_name as shopName,contact,sex as sex,city,province,remark,create_time as createTime,user_type as userType,
+        select user_id as userId,guid,open_id as openId,user_name as userName, nick_name as nickName, shop_name as shopName,contact,sex as sex,city,province,remark,create_time as createTime,user_type as userType,
         contract_no as contractNo,parent,number_id as numberId,phone,address, password,taxpayer_code as taxpayerCode,business_license as businessLicense,point,job_title as jobTitle,update_time as updateTime from Wx_User
     </sql>
 
     <select id="getWxUserById" parameterType="long" resultType="cn.meilituibian.api.domain.WxUser">
-        <include refid="select_wx_user"/>  where user_id=#{id}
+        <include refid="select_wx_user"/>  where guid=#{guid}
     </select>
 
     <select id="getWxUserByOpenId" parameterType="String" resultType="cn.meilituibian.api.domain.WxUser">

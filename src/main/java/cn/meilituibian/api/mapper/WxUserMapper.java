@@ -11,7 +11,7 @@ import java.util.Map;
 public interface WxUserMapper {
     WxUser getWxUserByOpenId(String openId);
 
-    WxUser getWxUserById(Long id);
+    WxUser getWxUserById(String guid);
 
     Long insertWxUser(WxUser wxUser);
 

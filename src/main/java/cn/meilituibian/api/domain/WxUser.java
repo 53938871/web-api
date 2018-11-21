@@ -10,6 +10,7 @@ public class WxUser implements Serializable{
 
     private String password;
     private Long userId;
+    private String guid;
     private String openId;
     private String userName; //用户名，用来登录
     private String nickName; //微信昵称
@@ -262,5 +263,13 @@ public class WxUser implements Serializable{
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public String getGuid() {
+        return guid;
+    }
+
+    public void setGuid(String guid) {
+        this.guid = guid;
     }
 }
