@@ -4,21 +4,21 @@
 
 <mapper namespace="cn.meilituibian.api.mapper.OrderMapper">
     <sql id="fields">
-        id,open_id as openId,project_id as projectId,project_name as projectName,user_name as userName,phone,subscribe_date as subscribeDate, parent_open_id as parentOpenId,create_date as createDate,status,order_no as orderNo
+        id,open_id as openId,guid,parent_guid as parentGuid,project_id as projectId,project_name as projectName,user_name as userName,phone,subscribe_date as subscribeDate, parent_open_id as parentOpenId,create_date as createDate,status,order_no as orderNo
     </sql>
     <insert id="insertOrder" parameterType="cn.meilituibian.api.domain.Order" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
-         insert into `Order`(open_id,project_id,project_name,user_name,phone,email,subscribe_date,parent_open_id,create_date, order_no)
-         values(#{openId}, #{projectId}, #{projectName}, #{userName}, #{phone}, #{email}, #{subscribeDate}, #{parentOpenId}, #{createDate}, #{orderNo})
+         insert into `Order`(open_id,guid,parent_guid,project_id,project_name,user_name,phone,email,subscribe_date,parent_open_id,create_date, order_no)
+         values(#{openId},#{guid}, #{parentGuid}, #{projectId}, #{projectName}, #{userName}, #{phone}, #{email}, #{subscribeDate}, #{parentOpenId}, #{createDate}, #{orderNo})
     </insert>
 
-    <select id="getOrdersByOpenId" resultType="Order">
+    <select id="getOrdersByGuid" resultType="Order">
         select <include refid="fields"/>
-        from `Order` where open_id=#{openId} and status != -1 order by subscribe_date desc
+        from `Order` where guid=#{guid} and status != -1 order by subscribe_date desc
     </select>
 
-    <select id="getOrderByIdAndOpenId"  resultType="Order">
+    <select id="getOrderByIdAndGuid"  resultType="Order">
         select <include refid="fields"/>
-        from `Order` where id = #{id} and open_id= #{openId}
+        from `Order` where id = #{id} and guid= #{guid}
     </select>
 
     <select id="getOrderById"  resultType="Order">
@@ -39,28 +39,28 @@
         <if test="updateDate != null">update_date=#{updateDate},</if>
         <if test="subscribeDate != null">subscribe_date=#{subscribeDate},</if>
         </set>
-        where open_id = #{openId} and id=#{id}
+        where guid = #{guid} and id=#{id}
     </update>
 
     <select id="getClientOrderByUser" resultType="Order">
-        select <include refid="fields"/> from `Order` where parent_open_id = #{openId}
+        select <include refid="fields"/> from `Order` where parent_guid = #{guid}
     </select>
 
     <sql id="short_field">
         id,open_id as openId,user_name as userName,project_id as projectId,project_name as projectName,phone,subscribe_date as subscribeDate,parent_open_id as parentOpenId,status,order_no as orderNo
     </sql>
     <select id="getPerformancesByOpenId" resultType="Order">
-        SELECT <include refid="short_field"/> FROM `order` a WHERE a.`parent_open_id`=#{openId} and status=2
+        SELECT <include refid="short_field"/> FROM `order` a WHERE a.`parent_guid`=#{guid} and status=2
         UNION ALL
-        SELECT <include refid="short_field"/> FROM `order` b WHERE EXISTS (SELECT 1 FROM wx_user WHERE b.parent_open_id = open_id AND parent=#{openId}) and status=2
+        SELECT <include refid="short_field"/> FROM `order` b WHERE EXISTS (SELECT 1 FROM wx_user WHERE b.parent_guid = guid AND parent=#{guid}) and status=2
 
     </select>
 
     <select id="getOrders" resultType="Order">
         select <include refid="short_field"/> from `order`
         <where>
-            <if test="openId != null">
-                open_id = #{openId}
+            <if test="guid != null">
+                guid = #{guid}
             </if>
             <if test="status != null">
                 and status = #{status}
@@ -74,7 +74,7 @@
     </select>
 
     <select id="computePrice" resultType="java.math.BigDecimal">
-        SELECT SUM(price) price FROM `order` WHERE (open_id=#{openId} OR parent_open_id=#{openId} ) AND update_date >= DATE_ADD(NOW(), INTERVAL #{month} MONTH) AND `status`=2
+        SELECT SUM(price) price FROM `order` WHERE (guid=#{guid} OR parent_guid=#{guid} ) AND update_date >= DATE_ADD(NOW(), INTERVAL #{month} MONTH) AND `status`=2
     </select>
 
 </mapper>

@@ -8,7 +8,7 @@ import java.util.Map;
 
 @Mapper
 public interface ProductOrderMapper {
-    Page<ProductOrder> findProductOrderListByUserId(long userId);
+    Page<ProductOrder> findProductOrderListByGuid(String guid);
 
     ProductOrder findOrderById(Long id);
 

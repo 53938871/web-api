@@ -14,7 +14,9 @@ public class Order implements Serializable {
     @NotNull(message = "项目Id不能为空")
     private Long projectId;
     @NotNull(message = "openId不能为空")
-    private String openId;
+    //private String openId;
+    private String guid;
+    private String parentGuid;
     private String userName;
     private String projectName;
     @NotNull(message = "联系电话不能为空")
@@ -151,13 +153,13 @@ public class Order implements Serializable {
         return OrderEnum.getOrderStatus(status);
     }
 
-    public String getOpenId() {
+/*    public String getOpenId() {
         return openId;
     }
 
     public void setOpenId(String openId) {
         this.openId = openId;
-    }
+    }*/
 
     public void setOrderStatus(String orderStatus) {
         this.orderStatus = orderStatus;
@@ -169,5 +171,21 @@ public class Order implements Serializable {
 
     public void setOrderNo(String orderNo) {
         this.orderNo = orderNo;
+    }
+
+    public String getGuid() {
+        return guid;
+    }
+
+    public void setGuid(String guid) {
+        this.guid = guid;
+    }
+
+    public String getParentGuid() {
+        return parentGuid;
+    }
+
+    public void setParentGuid(String parentGuid) {
+        this.parentGuid = parentGuid;
     }
 }

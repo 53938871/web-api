@@ -1,7 +1,6 @@
 package cn.meilituibian.api.controller;
 
 import cn.meilituibian.api.common.Constants;
-import cn.meilituibian.api.domain.Product;
 import cn.meilituibian.api.domain.ProductOrder;
 import cn.meilituibian.api.domain.WxUser;
 import cn.meilituibian.api.exception.ErrorResponseEntity;
@@ -33,7 +32,7 @@ public class ProductOrderController {
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     @ApiOperation(value = "兑换产品")
     public ResponseEntity<?> saveProductOrder(@RequestBody ProductOrder productOrder) {
-        WxUser wxUser = wxUserService.getUserByOpenId(productOrder.getOpenId());
+        WxUser wxUser = wxUserService.getUserByGuid(productOrder.getOpenId());
         productOrder.setUserId(wxUser.getUserId());
         productOrderService.saveProductOrder(productOrder);
         return new ResponseEntity<ProductOrder>(productOrder, HttpStatus.OK);
@@ -48,18 +47,18 @@ public class ProductOrderController {
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     @ApiOperation(value = "查看此用户所有产品订单信息")
-    public ResponseEntity<?> findProductOrderListByUserId(@RequestParam("userId")long  userId, @RequestParam(value = "pageNo", defaultValue = "1") int pageNo) {
-        Page<ProductOrder> orders = productOrderService.findProductOrderListByUserId(userId, pageNo, Constants.PAGE_SIZE);
+    public ResponseEntity<?> findProductOrderListByUserId(@RequestParam("guid")String  guid, @RequestParam(value = "pageNo", defaultValue = "1") int pageNo) {
+        Page<ProductOrder> orders = productOrderService.findProductOrderListByGuid(guid, pageNo, Constants.PAGE_SIZE);
         PageInfo<ProductOrder> result = new PageInfo<>(orders);
         return new ResponseEntity<PageInfo<ProductOrder>>(result, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/cancel/{id}", method = RequestMethod.POST)
     @ApiOperation(value = "取消未处理的订单")
-    public ResponseEntity<?> cancelProductOrder(@RequestParam("userId")long  userId, @RequestParam("id")long id) {
+    public ResponseEntity<?> cancelProductOrder(@RequestParam("guid")String guid, @RequestParam("id")long id) {
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("id", id);
-        paramMap.put("userId", userId);
+        paramMap.put("guid", guid);
         int successNum = productOrderService.cancelProductOrder(paramMap);
 
         if (successNum < 1) {
@@ -70,10 +69,10 @@ public class ProductOrderController {
 
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.POST)
     @ApiOperation(value = "删除已取消或已完成的订单")
-    public ResponseEntity<?> deleteProductOrder(@RequestParam("userId")long  userId, @RequestParam("id")long id) {
+    public ResponseEntity<?> deleteProductOrder(@RequestParam("guid")String guid, @RequestParam("id")long id) {
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("id", id);
-        paramMap.put("userId", userId);
+        paramMap.put("guid", guid);
         int successNum = productOrderService.deleteProductOrder(paramMap);
         if (successNum < 1) {
             return new ResponseEntity<ErrorResponseEntity>(ErrorResponseEntity.fail(successNum,500, "删除失败"), HttpStatus.OK);

@@ -11,13 +11,13 @@ import java.util.Map;
 @Mapper
 public interface OrderMapper {
     Long insertOrder(Order order);
-    List<Order> getOrdersByOpenId(String openId);
-    List<Order> getClientOrderByUser(String openId);
-    List<Order> getPerformancesByOpenId(String openId);
+    List<Order> getOrdersByGuid(String guid);
+    List<Order> getClientOrderByUser(String guid);
+    List<Order> getPerformancesByGuid(String guid);
     int updateOrder(Order order);
-    Order getOrderByIdAndOpenId(Map<String, Object> paramMap);
+    Order getOrderByIdAndGuid(Map<String, Object> paramMap);
     Order getOrderById(Long id);
     List<Order> getOrders(Map<String, Object> paramMap);
-    List<Order> findOrderByOpenIdAndProjectId(Map<String, Object> map);
-    BigDecimal computePrice(@Param("month") int month, @Param("openId") String openId);
+    List<Order> findOrderByGuidAndProjectId(Map<String, Object> map);
+    BigDecimal computePrice(@Param("month") int month, @Param("guid") String guid);
 }

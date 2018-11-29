@@ -38,10 +38,10 @@ public class OrderController {
         }
     }
 
-    @RequestMapping(value = {"/{openId}"}, method = RequestMethod.GET)
-    @ApiOperation(value = "根据openId获得所有订单信息")
-    public ResponseEntity<?> getOrdersByOpenId(@PathVariable String openId) {
-        List<Order> list = orderService.getOrdersByOpenId(openId);
+    @RequestMapping(value = {"/{guid}"}, method = RequestMethod.GET)
+    @ApiOperation(value = "根据guid获得所有订单信息")
+    public ResponseEntity<?> getOrdersByGuid(@PathVariable String guid) {
+        List<Order> list = orderService.getOrdersByGuidId(guid);
         return new ResponseEntity<List<Order>>(list, HttpStatus.OK);
     }
 
@@ -59,12 +59,12 @@ public class OrderController {
 
     @RequestMapping(value = {"/detail/{id}"}, method = RequestMethod.GET)
     @ApiOperation(value = "根据订单id或(open id 和订单id)获得订单信息")
-    public ResponseEntity<?> getOrdersByOpenId(@PathVariable Long id, @RequestParam(value = "openId", required = false) String openId) {
+    public ResponseEntity<?> getOrdersByGuid(@PathVariable Long id, @RequestParam(value = "guid", required = false) String guid) {
         Order order = null;
-        if (StringUtils.isEmpty(openId)) {
+        if (StringUtils.isEmpty(guid)) {
             order = orderService.getOrderById(id);
         } else {
-            order = orderService.getOrderByIdAndOpenId(id, openId);
+            order = orderService.getOrderByIdAndGuid(id, guid);
         }
         if (order == null) {
             ErrorResponseEntity response = ErrorResponseEntity.fail(order, 404, "找不到此订单");
@@ -73,35 +73,35 @@ public class OrderController {
         return new ResponseEntity<Order>(order, HttpStatus.OK);
     }
 
-    @RequestMapping(value = {"/client-orders/{openId}"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/client-orders/{guid}"}, method = RequestMethod.GET)
     @ApiOperation(value = "根据open id获得此open id的所有推荐客户的订单信息")
-    public ResponseEntity<?> getClientOrdersByOpenId(@PathVariable String openId) {
-        List<Order> orders = orderService.getClientOrderByUser(openId);
+    public ResponseEntity<?> getClientOrdersByGuid(@PathVariable String guid) {
+        List<Order> orders = orderService.getClientOrderByUser(guid);
         return new ResponseEntity<List<Order>>(orders, HttpStatus.OK);
     }
 
-    @RequestMapping(value = {"/performances/{openId}"}, method = RequestMethod.GET)
-    @ApiOperation(value = "根据open id查询此用户的业绩")
-    public ResponseEntity<?> getPerformancesByOpenId(@PathVariable String openId) {
-        Map<String, Object> result = orderService.getPerformancesByOpenId(openId);
+    @RequestMapping(value = {"/performances/{guid}"}, method = RequestMethod.GET)
+    @ApiOperation(value = "根据guid查询此用户的业绩")
+    public ResponseEntity<?> getPerformancesByGuid(@PathVariable String guid) {
+        Map<String, Object> result = orderService.getPerformancesByGuid(guid);
         return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
     }
 
     @RequestMapping(value = {"/list"}, method = RequestMethod.GET)
-    @ApiOperation(value = "根据open id,订单状态status或两者查询用户的订单,如/list?openId=1&status=0, /list?openId=1, /list?status=1")
-    public ResponseEntity<?> getOrders(@RequestParam(value = "openId", required = false) String openId,
+    @ApiOperation(value = "根据guid,订单状态status或两者查询用户的订单,如/list?guid=1&status=0, /list?guid=1, /list?status=1")
+    public ResponseEntity<?> getOrders(@RequestParam(value = "guid", required = false) String guid,
                                        @RequestParam(value = "status", required = false) Integer stauts) {
         Map<String, Object> paramMap = new HashMap<>();
-        paramMap.put("openId", openId);
+        paramMap.put("guid", guid);
         paramMap.put("status", stauts);
         List<Order> list = orderService.getOrders(paramMap);
         return new ResponseEntity<List<Order>>(list, HttpStatus.OK);
     }
 
     @RequestMapping(value = {"/check"}, method = RequestMethod.GET)
-    @ApiOperation(value = "下单时根据openId和projectId查看是否有没有处理过的订单")
-    public ResponseEntity<?> getOrderByOpenIdAndProject(@RequestParam String openId, @RequestParam int projectId) {
-        List<Order> list = orderService.getOrderByOpenIdAndProject(openId, projectId);
+    @ApiOperation(value = "下单时根据guid和projectId查看是否有没有处理过的订单")
+    public ResponseEntity<?> getOrderByOpenIdAndProject(@RequestParam String guid, @RequestParam int projectId) {
+        List<Order> list = orderService.getOrderByGuidAndProject(guid, projectId);
         return new ResponseEntity<List<Order>>(list, HttpStatus.OK);
     }
 }

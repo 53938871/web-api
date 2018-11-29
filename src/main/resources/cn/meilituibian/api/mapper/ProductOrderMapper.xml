@@ -8,6 +8,7 @@
         <id property="id" column="id" />
         <result property="userId" column="user_id"/>
         <result property="open_id" column="open_id"/>
+        <result property="guid" column="guid"/>
         <result property="productId" column="product_id"/>
         <result property="productName" column="product_name"/>
         <result property="quantity" column="quantity"/>
@@ -25,27 +26,27 @@
     </resultMap>
 
     <insert id="saveProductOrder" parameterType="ProductOrder" keyProperty="id" useGeneratedKeys="true">
-        insert into product_order(order_no,user_id,open_id,product_id,product_name,quantity,address,phone,remark,receiver)
-        values(#{orderNo},#{userId},#{openId},#{productId},#{productName},#{quantity},#{address},#{phone},#{remark}, #{receiver})
+        insert into product_order(order_no,user_id,guid,open_id,product_id,product_name,quantity,address,phone,remark,receiver)
+        values(#{orderNo},#{userId},#{guid},#{openId},#{productId},#{productName},#{quantity},#{address},#{phone},#{remark}, #{receiver})
     </insert>
 
     <select id="findOrderById" parameterType="long" resultMap="productOrderResultMap">
-        SELECT id, user_id AS userId, open_id AS openId,product_id AS productId,product_name AS productName,quantity,address,phone,remark,ship_order AS shipOrder,
+        SELECT id, user_id AS userId, guid,open_id AS openId,product_id AS productId,product_name AS productName,quantity,address,phone,remark,ship_order AS shipOrder,
         ship_name AS shipName,create_time AS createTime, update_time AS updateTime, delivery_time AS deliveryTime,receive_time AS receiveTime,receiver
         FROM product_order WHERE id = #{id} AND status > -2
     </select>
-    <select id="findProductOrderListByUserId" resultType="ProductOrder" parameterType="long">
-        SELECT id, user_id AS userId, open_id AS openId,product_id AS productId,product_name AS productName,quantity,address,phone,remark,ship_order AS shipOrder,
+    <select id="findProductOrderListByGuid" resultType="ProductOrder" parameterType="long">
+        SELECT id, user_id AS userId, guid,open_id AS openId,product_id AS productId,product_name AS productName,quantity,address,phone,remark,ship_order AS shipOrder,
         ship_name AS shipName,create_time AS createTime, update_time AS updateTime, delivery_time AS deliveryTime,receive_time AS receiveTime,receiver
-        FROM product_order WHERE user_id = #{userId} AND status>-2
+        FROM product_order WHERE guid = #{guid} AND status>-2
     </select>
 
     <update id="cancelProductOrder" parameterType="map">
-        update product_order set status=-1 where user_id = #{userId} and id = #{id} and status=0
+        update product_order set status=-1 where guid = #{guid} and id = #{id} and status=0
     </update>
 
     <delete id="deleteProductOrder" parameterType="map">
-        update product_order set status=-2 where user_id = #{userId} and id = #{id} and status in (-1, 3)
+        update product_order set status=-2 where guid = #{guid} and id = #{id} and status in (-1, 3)
     </delete>
 </mapper>
 

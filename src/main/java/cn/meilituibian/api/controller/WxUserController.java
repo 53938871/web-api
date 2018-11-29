@@ -1,7 +1,6 @@
 package cn.meilituibian.api.controller;
 
 import cn.meilituibian.api.common.ErrorCode;
-import cn.meilituibian.api.domain.SalesmanGrade;
 import cn.meilituibian.api.domain.WxUser;
 import cn.meilituibian.api.exception.ErrorResponseEntity;
 import cn.meilituibian.api.service.SalesManGradeService;
@@ -17,7 +16,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -43,7 +41,7 @@ public class WxUserController {
     public ResponseEntity<?> getUserByOpenId(@RequestParam(value = "open_id", required = true) String openId,
                                              @RequestParam(value = "parent", required = false) String parent,
                                              @RequestParam(value = "nickName", required = false) String nickName) {
-        WxUser wxUser = wxUserService.getUserByOpenId(openId, parent, nickName);
+        WxUser wxUser = wxUserService.getUserByGuid(openId, parent, nickName);
         return new ResponseEntity<WxUser>(wxUser, HttpStatus.OK);
     }
 
@@ -134,7 +132,7 @@ public class WxUserController {
     public ResponseEntity<?> upgrade(@PathVariable("openId") String openId, @RequestBody(required = false) WxUser wxUser) {
         wxUser.setOpenId(openId);
         wxUserService.upgrade(wxUser);
-        WxUser user = wxUserService.getUserByOpenId(openId);
+        WxUser user = wxUserService.getUserByGuid(openId);
         return new ResponseEntity<WxUser>(user, HttpStatus.OK);
     }
 

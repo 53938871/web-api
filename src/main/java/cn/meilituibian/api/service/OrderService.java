@@ -30,15 +30,15 @@ public class OrderService {
     @Autowired
     private SalesManGradeMapper salesManGradeMapper;
 
-    public List<Order> getOrderByOpenIdAndProject(String openId, int projectId) {
+    public List<Order> getOrderByGuidAndProject(String guid, int projectId) {
         Map<String, Object> param = new HashMap<>();
-        param.put("openId", openId);
+        param.put("guid", guid);
         param.put("projectId", projectId);
-        return orderMapper.findOrderByOpenIdAndProjectId(param);
+        return orderMapper.findOrderByGuidAndProjectId(param);
     }
 
     public Long insertOrder(Order order) {
-        WxUser wxUser = wxUserService.getUserByOpenId(order.getOpenId());
+        WxUser wxUser = wxUserService.getUserByGuid(order.getGuid());
         String orderNo = OrderNoGenerator.generateOrderNo(wxUser.getUserId());
         order.setOrderNo(orderNo);
         order.setCreateDate(new Date());
@@ -47,8 +47,8 @@ public class OrderService {
         return order.getId();
     }
 
-    public List<Order> getOrdersByOpenId(String openId){
-        return orderMapper.getOrdersByOpenId(openId);
+    public List<Order> getOrdersByGuidId(String guid){
+        return orderMapper.getOrdersByGuid(guid);
     }
 
     public boolean updateOrder(Order order){
@@ -60,24 +60,24 @@ public class OrderService {
         return false;
     }
 
-    public Order getOrderByIdAndOpenId(Long id, String openId) {
+    public Order getOrderByIdAndGuid(Long id, String guid) {
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("id", id);
-        paramMap.put("openId", openId);
-        return orderMapper.getOrderByIdAndOpenId(paramMap);
+        paramMap.put("guid", guid);
+        return orderMapper.getOrderByIdAndGuid(paramMap);
     }
 
-    public List<Order> getClientOrderByUser(String openId) {
-        return orderMapper.getClientOrderByUser(openId);
+    public List<Order> getClientOrderByUser(String guid) {
+        return orderMapper.getClientOrderByUser(guid);
     }
 
     public Order getOrderById(Long id) {
         return orderMapper.getOrderById(id);
     }
 
-    public Map<String, Object> getPerformancesByOpenId(String openId) {
+    public Map<String, Object> getPerformancesByGuid(String guid) {
         Map<String, Object> result = new HashMap<>();
-        List<Order> list = orderMapper.getPerformancesByOpenId(openId);
+        List<Order> list = orderMapper.getPerformancesByGuid(guid);
         if(list == null || list.isEmpty()) {
             return Collections.EMPTY_MAP;
         }
@@ -104,8 +104,8 @@ public class OrderService {
         return list;
     }
 
-    public BigDecimal computePrice(int month, String openId) {
-        BigDecimal price = orderMapper.computePrice(month, openId);
+    public BigDecimal computePrice(int month, String guid) {
+        BigDecimal price = orderMapper.computePrice(month, guid);
         return price == null ? new BigDecimal(0) : price;
     }
 }

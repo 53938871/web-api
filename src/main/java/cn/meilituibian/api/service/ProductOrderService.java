@@ -75,9 +75,9 @@ public class ProductOrderService {
     }
 
 
-    public Page<ProductOrder> findProductOrderListByUserId(long userId, int pageNo, int pageSize){
+    public Page<ProductOrder> findProductOrderListByGuid(String guid, int pageNo, int pageSize){
         PageHelper.startPage(pageNo, pageSize);
-        return productOrderMapper.findProductOrderListByUserId(userId);
+        return productOrderMapper.findProductOrderListByGuid(guid);
     }
 
     public ProductOrder findProductOrderById(Long id) {

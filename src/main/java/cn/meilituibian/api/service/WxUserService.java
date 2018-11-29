@@ -4,7 +4,6 @@ import cn.meilituibian.api.WxProperties;
 import cn.meilituibian.api.common.JobTitleEnum;
 import cn.meilituibian.api.common.UserTypeEnum;
 import cn.meilituibian.api.domain.WxUser;
-import cn.meilituibian.api.exception.ApiException;
 import cn.meilituibian.api.mapper.WxUserMapper;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.logging.log4j.LogManager;
@@ -18,9 +17,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 
 import java.security.MessageDigest;
-import java.time.Instant;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.*;
 
 import static cn.meilituibian.api.common.Constants.USER_TYPE_MERCHAT;
@@ -49,7 +46,7 @@ public class WxUserService {
         return user;
     }
 
-    public WxUser getUserByOpenId(String openId) {
+    public WxUser getUserByGuid(String openId) {
         WxUser wxUser = wxUserMapper.getWxUserByOpenId(openId);
         if (wxUser == null) {
             throw new RuntimeException("用户不存在");
@@ -58,7 +55,7 @@ public class WxUserService {
         return wxUser;
     }
 
-    public WxUser getUserByOpenId(String openId, String parent, String nickName) {
+    public WxUser getUserByGuid(String openId, String parent, String nickName) {
         WxUser wxUser = wxUserMapper.getWxUserByOpenId(openId);
         if (wxUser == null) {
             wxUser = new WxUser();
@@ -259,7 +256,7 @@ public class WxUserService {
     }
 
     public boolean allowUpgradeByTime(String openId, int month) {
-        WxUser user = this.getUserByOpenId(openId);
+        WxUser user = this.getUserByGuid(openId);
         Date updateTime = user.getUpdateTime();
         if (updateTime == null) {
             return false;

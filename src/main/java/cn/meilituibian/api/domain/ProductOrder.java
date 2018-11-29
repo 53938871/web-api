@@ -9,6 +9,7 @@ public class ProductOrder implements Serializable {
     private Long id;
     private String orderNo;
     private Long userId;
+    private String guid;
     private String openId;
     private Long productId;
     private String productName;
@@ -173,5 +174,13 @@ public class ProductOrder implements Serializable {
 
     public void setProduct(Product product) {
         this.product = product;
+    }
+
+    public String getGuid() {
+        return guid;
+    }
+
+    public void setGuid(String guid) {
+        this.guid = guid;
     }
 }

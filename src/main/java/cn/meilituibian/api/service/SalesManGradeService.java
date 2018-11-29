@@ -45,7 +45,7 @@ public class SalesManGradeService {
 
     //在这里判断业务员是否在升级
     public Map<String,Object> upgrade(String openId) {
-        WxUser wxUser = wxUserService.getUserByOpenId(openId);
+        WxUser wxUser = wxUserService.getUserByGuid(openId);
         Map<String,Object> result = new HashMap<>();
         result.put(UPGRADE, false);
         result.put("openId", openId);
