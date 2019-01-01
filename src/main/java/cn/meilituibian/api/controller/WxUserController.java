@@ -16,6 +16,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Map;
 
@@ -76,7 +77,8 @@ public class WxUserController {
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ApiOperation(value = "用户登录，根据用户名userName和密码password登录")
-    public ResponseEntity<?> login(@RequestBody WxUser wxUser) {
+    public ResponseEntity<?> login(@RequestBody WxUser wxUser, HttpServletResponse response, @CookieValue(value = "token", required = false) String token) {
+
         String userName = wxUser.getUserName();
         String password = wxUser.getPassword();
         if (StringUtils.isEmpty(userName) || StringUtils.isEmpty(password)) {
