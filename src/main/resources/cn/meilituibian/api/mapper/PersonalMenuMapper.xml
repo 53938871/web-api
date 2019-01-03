@@ -1,0 +1,13 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.meilituibian.api.mapper.PersonalMenuMapper">
+    <select id="getPersonalMenusByIds" parameterType="java.util.List" resultType="cn.meilituibian.api.domain.PersonalMenu">
+        select id,`name`,url,`desc`,icon from Personal_Menu where status=1 and id in
+        <foreach collection="ids" index="index" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+
+</mapper>
